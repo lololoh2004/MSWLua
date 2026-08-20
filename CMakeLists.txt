@@ -5,7 +5,6 @@ project(MSWLua LANGUAGES C CXX)
 cmake_policy(SET CMP0169 OLD)
 
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_C_STANDARD 11)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY         "${CMAKE_SOURCE_DIR}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG   "${CMAKE_SOURCE_DIR}")
@@ -50,9 +49,11 @@ endif()
 
 
 # === MSWLua Wrapper ===
-file(GLOB_RECURSE WRAPPER_SOURCES "src/*.c" "src/*.h")
+file(GLOB_RECURSE WRAPPER_SOURCES "src/*.cpp" "src/*.hpp")
 add_library(MSWLua_lib STATIC ${WRAPPER_SOURCES}
-        src/_include/init_lua.h)
+        src/_include/init_lua.hpp
+        src/_include/state_class.hpp
+        src/classes/state_init.cpp)
 
 target_include_directories(MSWLua_lib PUBLIC src)
 

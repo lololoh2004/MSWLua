@@ -9,5 +9,3 @@
 #else
     #define MSWLUA_API
 #endif
-
-

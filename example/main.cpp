@@ -1,5 +1,5 @@
 #include <string>
-#include "mswlua.h"
+#include "mswlua.hpp"
 
 extern "C"{
 // Utils
