@@ -2,6 +2,8 @@ cmake-build-*/
 .cmake/
 CMakeCache.txt
 CMakeFiles/
+lib/luajit2/dynasm/
+lib/luajit2/src/
 Makefile
 cmake_install.cmake
 
