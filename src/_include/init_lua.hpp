@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mswlua_common.h"
+#include "mswlua_common.hpp"
 
 typedef struct lua_State lua_State;
 

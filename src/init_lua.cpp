@@ -1,11 +1,12 @@
-#include "_include/init_lua.h"
+#include "_include/init_lua.hpp"
 
+extern "C"{
 #include <lua.h>
 #include <lualib.h>
 #include <lauxlib.h>
 
-#include <stdlib.h>
 #include "term.h"
+}
 
 lua_State* initSingleState(){
     lua_State* L = luaL_newstate();
@@ -13,7 +14,6 @@ lua_State* initSingleState(){
         termMsg("Error creating lua state\n", "LUA");
         return NULL;
     }
-
     luaL_openlibs(L);
     return L;
 }
