@@ -1,4 +1,4 @@
 #pragma once
 
 #include "mswlua_common.hpp"
-#include "_include/init_lua.hpp"
+#include "_include/state_class.hpp"

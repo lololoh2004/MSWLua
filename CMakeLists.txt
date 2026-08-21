@@ -51,9 +51,9 @@ endif()
 # === MSWLua Wrapper ===
 file(GLOB_RECURSE WRAPPER_SOURCES "src/*.cpp" "src/*.hpp")
 add_library(MSWLua_lib STATIC ${WRAPPER_SOURCES}
-        src/_include/init_lua.hpp
         src/_include/state_class.hpp
-        src/classes/state_init.cpp)
+        src/classes/state_init.cpp
+        src/classes/state_run.cpp)
 
 target_include_directories(MSWLua_lib PUBLIC src)
 
