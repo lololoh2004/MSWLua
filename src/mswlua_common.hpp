@@ -17,8 +17,6 @@ struct lua_State;
 
 namespace mswlua{
 
-using luaDynamibT = std::variant<std::monostate, bool, double, std::string>;
-
 namespace lib{
 enum lib : unsigned int {
     base    = 1 << 0,
