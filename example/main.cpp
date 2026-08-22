@@ -20,9 +20,8 @@ int main(){
     }
     svState.openLibs(mswlua::lib::base);
 
-    std::string returnVal;
-    svState.runStrScript(R"(return "hell")", false, &returnVal);
-    printf("returnVal = %s\n", returnVal.c_str());
+    svState.doScript(R"(print("Hello from Lua!"))", ScriptSrc::RawText);
 
+    termWait("stopped\n");
     return 0;
 }
