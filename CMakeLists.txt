@@ -53,7 +53,9 @@ file(GLOB_RECURSE WRAPPER_SOURCES "src/*.cpp" "src/*.hpp")
 add_library(MSWLua_lib STATIC ${WRAPPER_SOURCES}
         include/mswlua/class/state.hpp
         src/class/state_init.cpp
-        src/class/state_run.cpp)
+        src/class/state_run.cpp
+        src/ffi/scan_src_headers.cpp
+        include/mswlua/ffi/scan_src_headers.hpp)
 
 target_include_directories(MSWLua_lib PUBLIC
         src
