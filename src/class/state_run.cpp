@@ -1,9 +1,9 @@
-#include "_include/state_class.hpp"
+#include "mswlua/class/state.hpp"
 
 extern "C"{
 #include "lua.h"
 #include "lauxlib.h"
-#include "term.h"
+#include "lo_utils/term.h"
 }
 
 #include <string>

@@ -1,12 +1,9 @@
 #include "mswlua.hpp"
 
 extern "C"{
-#include "common.h"
-#include "term.h"
+#include "lo_utils/common.h"
+#include "lo_utils/term.h"
 }
-
-#include <cstdio>
-#include <string>
 
 int main(){
     termSetupEnv();
