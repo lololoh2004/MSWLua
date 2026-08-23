@@ -30,7 +30,7 @@ file(GLOB_RECURSE UTILS_SOURCES
 add_library(LolohUtils STATIC ${UTILS_SOURCES})
 target_include_directories(LolohUtils PUBLIC
         "${Utils_SRC_DIR}/src"
-        "${Utils_SRC_DIR}/src/_include"
+        "${Utils_SRC_DIR}/include"
 )
 
 
@@ -51,11 +51,14 @@ endif()
 # === MSWLua Wrapper ===
 file(GLOB_RECURSE WRAPPER_SOURCES "src/*.cpp" "src/*.hpp")
 add_library(MSWLua_lib STATIC ${WRAPPER_SOURCES}
-        src/_include/state_class.hpp
-        src/classes/state_init.cpp
-        src/classes/state_run.cpp)
+        include/mswlua/class/state.hpp
+        src/class/state_init.cpp
+        src/class/state_run.cpp)
 
-target_include_directories(MSWLua_lib PUBLIC src)
+target_include_directories(MSWLua_lib PUBLIC
+        src
+        include
+)
 
 target_link_libraries(MSWLua_lib PUBLIC LolohUtils LuaJIT_lib)
 
