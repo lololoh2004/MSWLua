@@ -1,11 +1,8 @@
-extern "C"{
-#include "lo_utils/common.h"
 #include "lo_utils/term.h"
-}
 
 #include "mswlua.hpp"
+#include "mswlua/ffi/scan_headers_legacy.hpp"
 #include <filesystem>
-#include <fstream>
 
 namespace fs = std::filesystem;
 
@@ -27,7 +24,7 @@ void scanAndRun(luaState& state){
 
 int main(){
     termSetupEnv();
-    termMsgC("Hello World!\n", "MAIN_C", COLOR_GRAY);
+    termMsg("Hello World!", "MAIN_C", COLOR_GRAY);
 
     luaState state;
     state.openLibs(mswlua::lib::base);
@@ -35,6 +32,8 @@ int main(){
     state.doScript(R"(print("Hello from internal init script!"))", ScriptSrc::RawText);
     scanAndRun(state);
 
-    termWait("stopped\n");
+    //buildCDefStr("./example", "TEST_API");
+
+    termWait();
     return 0;
 }

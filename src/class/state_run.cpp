@@ -3,15 +3,14 @@
 extern "C"{
 #include "lua.h"
 #include "lauxlib.h"
-#include "lo_utils/term.h"
 }
 
+#include "lo_utils/term.h"
 #include <string>
 #include <string_view>
 
 void luaState::reportErr(){
-    std::string errorWithNewline = std::string(lua_tostring(m_state, -1)) + "\n";
-    termMsgC(errorWithNewline.c_str(), "LUALIB", COLOR_RED);
+    termMsg(lua_tostring(m_state, -1), "LUALIB", COLOR_RED);
 
     lua_pop(m_state, 1);
 }
