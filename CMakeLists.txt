@@ -78,5 +78,5 @@ target_link_options(MSWLua_example PRIVATE "-Wl,-rpath,$ORIGIN")
 add_custom_command(TARGET MSWLua_example POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${LUA_SHARED_FILE}"
-        "$<TARGET_FILE_DIR:MSWLua_example>"
+        "${CMAKE_SOURCE_DIR}"
 )
