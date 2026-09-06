@@ -1,7 +1,6 @@
 #include "lo_utils/term.h"
 
 #include "mswlua.hpp"
-#include "mswlua/ffi/scan_headers_legacy.hpp"
 #include <filesystem>
 
 namespace fs = std::filesystem;
@@ -31,8 +30,6 @@ int main(){
 
     state.doScript(R"(print("Hello from internal init script!"))", ScriptSrc::RawText);
     scanAndRun(state);
-
-    //buildCDefStr("./example", "TEST_API");
 
     termWait();
     return 0;
