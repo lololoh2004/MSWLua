@@ -7,9 +7,15 @@ lib/luajit2/src/
 Makefile
 cmake_install.cmake
 
+lib/LoUtils
 
+*.dll
+*.so
+*.so.2
 *.exe
 *.app
+
+MSWLua_example
 
 .idea/
 *.iws
