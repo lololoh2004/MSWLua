@@ -7,7 +7,6 @@ lib/luajit2/src/
 Makefile
 cmake_install.cmake
 
-libclang.dll
 
 *.exe
 *.app
