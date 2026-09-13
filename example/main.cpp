@@ -3,6 +3,8 @@
 #include "mswlua.hpp"
 #include <filesystem>
 
+#include "mswlua/ffi/build_struct_cdef.hpp"
+
 namespace fs = std::filesystem;
 
 void runFolder(const fs::path& path, luaState& state){
@@ -26,11 +28,18 @@ int main(){
     termMsg("Hello World!", "MAIN_C", COLOR_GRAY);
 
     luaState state;
-    state.openLibs(mswlua::lib::base);
+    state.openLibs(BaseLuaLib);
 
-    state.doScript(R"(print("Hello from internal init script!"))", ScriptSrc::RawText);
-    scanAndRun(state);
+    structBuilder cdefStructs;
+    cdefStructs.createStruct("Vector3")
+        ->var("float", "x")
+        ->var("float", "y")
+        ->var("float", "z")
+    ->commitStruct();
 
-    termWait();
+    cdefStructs.endBuilding();
+
+    printf("%s", cdefStructs.getCDefContent().c_str());
+    // termWait();
     return 0;
 }
