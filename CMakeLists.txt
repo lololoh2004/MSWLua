@@ -19,7 +19,7 @@ FetchContent_Declare(
         GIT_TAG        main
         SOURCE_DIR     "${CMAKE_CURRENT_SOURCE_DIR}/lib/LoUtils"
 )
-FetchContent_Populate(LolohUtilsPack_raw)
+FetchContent_MakeAvailable(LolohUtilsPack_raw)
 set(Utils_SRC_DIR "${lolohutilspack_raw_SOURCE_DIR}")
 
 
@@ -55,6 +55,12 @@ add_library(MSWLua_lib STATIC ${WRAPPER_SOURCES}
         include/mswlua/class/state.hpp
         src/class/state_init.cpp
         src/class/state_run.cpp
+        src/class/state_func_reg.cpp
+        include/mswlua/ffi/build_struct_cdef.hpp
+        src/ffi/build_struct_cdef.cpp
+        include/mswlua/ffi/build_func_cdef.hpp
+        src/ffi/build_func_cdef.cpp
+        include/mswlua/ffi/cdef_common.hpp
 )
 
 target_include_directories(MSWLua_lib PUBLIC

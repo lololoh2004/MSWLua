@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../common.hpp"
+#include "mswlua/common.hpp"
 #include <string_view>
 
 struct lua_State;
@@ -22,6 +22,11 @@ public:
 
     void openLibs();
     void openLibs(unsigned int flags);
+
+    // template<typename ... Args>
+    // void regFunc(void* funcPtr, std::string name, Args... args){
+    //
+    // }
 
     bool doScript(std::string_view content, ScriptSrc srcType = ScriptSrc::FilePath);
 

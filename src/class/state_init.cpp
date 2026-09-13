@@ -12,15 +12,15 @@ struct libMapStruct{
     int (*open_func)(lua_State*);
 };
 static constexpr libMapStruct libMap[] {
-    {mswlua::lib::base,    luaopen_base},
-    {mswlua::lib::debug,   luaopen_debug},
-    {mswlua::lib::ffi,     luaopen_ffi},
-    {mswlua::lib::io,      luaopen_io},
-    {mswlua::lib::math,    luaopen_math},
-    {mswlua::lib::os,      luaopen_os},
-    {mswlua::lib::package, luaopen_package},
-    {mswlua::lib::string,  luaopen_string},
-    {mswlua::lib::table,   luaopen_table},
+    {BaseLuaLib,    luaopen_base},
+    {DebugLuaLib,   luaopen_debug},
+    {FFILuaLib,     luaopen_ffi},
+    {IOLuaLib,      luaopen_io},
+    {MathLuaLib,    luaopen_math},
+    {OSLuaLib,      luaopen_os},
+    {PkgLuaLib,     luaopen_package},
+    {StringLuaLib,  luaopen_string},
+    {TableLuaLib,   luaopen_table},
 };
 
 luaState::luaState(){
@@ -33,7 +33,7 @@ void luaState::openLibs(){
 }
 
 void luaState::openLibs(unsigned int flags){
-    if (flags & mswlua::lib::_all){
+    if (flags & AllLuaLibs){
         luaL_openlibs(m_state);
         return;
     }
