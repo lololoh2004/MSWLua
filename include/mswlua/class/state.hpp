@@ -23,11 +23,6 @@ public:
     void openLibs();
     void openLibs(unsigned int flags);
 
-    // template<typename ... Args>
-    // void regFunc(void* funcPtr, std::string name, Args... args){
-    //
-    // }
-
     bool doScript(std::string_view content, ScriptSrc srcType = ScriptSrc::FilePath);
 
     [[nodiscard]] lua_State* getRawState() const noexcept { return m_state; }

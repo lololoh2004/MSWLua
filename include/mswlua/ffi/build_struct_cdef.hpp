@@ -3,27 +3,26 @@
 #include <string>
 #include <string_view>
 
-#include "cdef_common.hpp"
-
 
 class structBuilder{
-    std::string   m_structName;
-    std::string   m_cdefResult;
-    cdefStateEnum      m_cdefState   = NoCDefStarted;
-    curObjectStateEnum m_structState = ObjectNotStarted;
+    std::string m_structName;
+    std::string m_cdefResult;
+    std::string m_bindResult;
 
-    void createCDefStart();
+    size_t m_fieldCount    = 0;
+    bool m_isStructStarted = false;
+
+    void endStruct();
 public:
     structBuilder()  = default;
     ~structBuilder() = default;
 
-    structBuilder* createStruct(std::string_view name);
-    structBuilder* commitStruct();
+    structBuilder& createStruct(std::string_view name);
+    structBuilder& commitAll();
 
-    structBuilder* var(std::string_view type, std::string_view name);
-    structBuilder* method();
-
-    void endBuilding();
+    structBuilder& var(std::string_view type, std::string_view name);
+    // Methods have not yet been implemented, but in the future it will be cdata + metatype.
+    structBuilder& method();
 
     std::string getCDefContent() { return m_cdefResult; }
 };

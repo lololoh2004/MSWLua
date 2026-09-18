@@ -3,27 +3,31 @@
 #include <string>
 #include <string_view>
 
-#include "cdef_common.hpp"
 
+// Mangling will be taken into account in the future
+enum funcStandardType{
+    StandardC,
+    GNU_CXX
+};
 
 class funcBuilder{
-    std::string   m_funcName;
-    std::string   m_cdefResult;
-    cdefStateEnum      m_cdefState = NoCDefStarted;
-    curObjectStateEnum m_funcState = ObjectNotStarted;
+    std::string m_funcName;
+    std::string m_cdefResult;
+    std::string m_bindResult;
 
-    void createCDefStart();
+    funcStandardType m_funcType = StandardC;
+    size_t m_argCount = 0;
 public:
     funcBuilder()  = default;
     ~funcBuilder() = default;
 
-    funcBuilder* createFunc(std::string_view name);
-    funcBuilder* commitFunc();
+    funcBuilder& createFunc(std::string_view name, void* directPtr = nullptr);
+    funcBuilder& commitAll();
 
-    funcBuilder* returnVal(std::string_view type);
-    funcBuilder* arg(std::string_view type, std::string_view name);
+    funcBuilder& setFuncType(funcStandardType type) { m_funcType = type; return *this; }
+    funcBuilder& returnType(std::string_view type);
+    funcBuilder& arg(std::string_view type, std::string_view name);
 
-    void endBuilding();
 
     std::string getCDefContent() { return m_cdefResult; }
 };

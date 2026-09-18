@@ -1,8 +1,9 @@
-#include "lo_utils/term.h"
+#include "lo_utils/cxx_wrap/term.hpp"
 
 #include "mswlua.hpp"
 #include <filesystem>
 
+#include "mswlua/ffi/build_func_cdef.hpp"
 #include "mswlua/ffi/build_struct_cdef.hpp"
 
 namespace fs = std::filesystem;
@@ -25,21 +26,41 @@ void scanAndRun(luaState& state){
 
 int main(){
     termSetupEnv();
-    termMsg("Hello World!", "MAIN_C", COLOR_GRAY);
+    term::msg("Hello World!", "MAIN_C", COLOR_GRAY);
 
     luaState state;
     state.openLibs(BaseLuaLib);
 
     structBuilder cdefStructs;
-    cdefStructs.createStruct("Vector3")
-        ->var("float", "x")
-        ->var("float", "y")
-        ->var("float", "z")
-    ->commitStruct();
-
-    cdefStructs.endBuilding();
+    cdefStructs
+    .createStruct("vec3")
+        .var("float", "x")
+        .var("float", "y")
+        .var("float", "z")
+    .createStruct("rgba_c")
+        .var("char", "r")
+        .var("char", "g")
+        .var("char", "b")
+        .var("char", "a")
+    .commitAll();
 
     printf("%s", cdefStructs.getCDefContent().c_str());
-    // termWait();
+
+    // funcBuilder funcStructs;
+    // funcStructs
+    // .createFunc("foo")
+    //     ->returnVal("void")
+    //     ->arg("float", "x")
+    //     ->arg("float", "y")
+    //     ->arg("float", "z")
+    // ->createFunc("foosttt")
+    // ->commitFunc()
+    //     ->returnVal("void")
+    //     ->arg("int", "x")
+    // ->commitFunc();
+    //
+    // funcStructs.endBuilding();
+    //
+    // printf("%s", funcStructs.getCDefContent().c_str());
     return 0;
 }

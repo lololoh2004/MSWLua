@@ -5,12 +5,12 @@ extern "C"{
 #include "lauxlib.h"
 }
 
-#include "lo_utils/term.h"
+#include "lo_utils/cxx_wrap/term.hpp"
 #include <string>
 #include <string_view>
 
 void luaState::reportErr(){
-    termMsg(lua_tostring(m_state, -1), "LUALIB", COLOR_RED);
+    term::msg(lua_tostring(m_state, -1), "LUALIB", COLOR_RED);
 
     lua_pop(m_state, 1);
 }
