@@ -1,17 +1,26 @@
 #include "mswlua/ffi/build_func_cdef.hpp"
 
 
-void funcBuilder::createCDefStart(){
-    ::createCDefStart(m_cdefResult, m_cdefState);
+funcBuilder& funcBuilder::createFunc(std::string_view name, void* directPtr){
+
+
+    return *this;
 }
 
-funcBuilder* funcBuilder::createFunc(std::string_view name){
-    if (m_cdefState == NoCDefStarted)
-        createCDefStart();
+funcBuilder& funcBuilder::returnType(std::string_view type){
 
-    m_funcName   = name;
-    m_cdefResult += std::string(1 * 4, ' ');
-    m_funcState = ObjectStarted;
 
-    return this;
+    return *this;
+}
+
+funcBuilder& funcBuilder::arg(std::string_view type, std::string_view name){
+
+
+    return *this;
+}
+
+funcBuilder& funcBuilder::commitAll(){
+
+
+    return *this;
 }

@@ -55,7 +55,6 @@ add_library(MSWLua_lib STATIC ${WRAPPER_SOURCES}
         include/mswlua/class/state.hpp
         src/class/state_init.cpp
         src/class/state_run.cpp
-        src/class/state_func_reg.cpp
         include/mswlua/ffi/build_struct_cdef.hpp
         src/ffi/build_struct_cdef.cpp
         include/mswlua/ffi/build_func_cdef.hpp
