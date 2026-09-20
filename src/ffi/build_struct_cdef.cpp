@@ -3,6 +3,8 @@
 
 
 void structBuilder::endStruct(){
+    if (m_fieldCount == 0)
+        var("void*", "PLACEHOLDER");
     m_cdefResult += std::string(TAB_LEN * 1, ' ');
     m_cdefResult += "} " + m_structName + ";\n";
     m_isStructStarted = false;
@@ -34,9 +36,8 @@ structBuilder& structBuilder::var(std::string_view type, std::string_view name){
 
     return *this;
 }
+
 structBuilder& structBuilder::commitAll(){
-    if (m_fieldCount == 0)
-        var("void*", "PLACEHOLDER");
     if (m_isStructStarted)
         endStruct();
 
