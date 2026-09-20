@@ -25,4 +25,5 @@ public:
     structBuilder& method();
 
     std::string getCDefContent() { return m_cdefResult; }
+    std::string getBindContent() { return m_bindResult; }
 };
