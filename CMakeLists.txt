@@ -20,23 +20,12 @@ FetchContent_Declare(
         SOURCE_DIR     "${CMAKE_CURRENT_SOURCE_DIR}/lib/LoUtils"
 )
 FetchContent_MakeAvailable(LolohUtilsPack_raw)
-set(Utils_SRC_DIR "${lolohutilspack_raw_SOURCE_DIR}")
-
-
-# === Utils Auto Build ===
-file(GLOB_RECURSE UTILS_SOURCES
-        "${Utils_SRC_DIR}/src/*.c"
-        "${Utils_SRC_DIR}/src/*.h"
-)
-add_library(LolohUtils STATIC ${UTILS_SOURCES})
-target_include_directories(LolohUtils PUBLIC
-        "${Utils_SRC_DIR}/src"
-        "${Utils_SRC_DIR}/include"
-)
 
 
 # === OpenResty LuaJIT 2 ===
-add_library(LuaJIT_lib INTERFACE)
+add_library(LuaJIT_lib INTERFACE
+        include/mswlua/qol/parse_cfg_t1.hpp
+        include/mswlua/qol/parse_cfg_t2.h)
 
 target_include_directories(LuaJIT_lib INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/lib/luajit2/include")
 
@@ -63,6 +52,7 @@ add_library(MSWLua_lib STATIC ${WRAPPER_SOURCES}
         src/class/state_reg.cpp
         src/class/state_run_script.cpp
         src/class/state_common.cpp
+        src/class/control_temp_val.cpp
 )
 
 target_include_directories(MSWLua_lib PUBLIC
@@ -70,14 +60,14 @@ target_include_directories(MSWLua_lib PUBLIC
         include
 )
 
-target_link_libraries(MSWLua_lib PUBLIC LolohUtils LuaJIT_lib)
+target_link_libraries(MSWLua_lib PUBLIC LolohUtilsPack_cxx LuaJIT_lib)
 
 
 # === Example with CXX ===
 add_executable(MSWLua_example
         example/main.cpp
 )
-target_link_libraries(MSWLua_example PRIVATE MSWLua_lib)
+target_link_libraries(MSWLua_example PRIVATE LolohUtilsPack_cxx MSWLua_lib)
 
 
 # === Custom Cmds ===
