@@ -1,4 +1,4 @@
-#include <lo_utils/term.h>
+#include <lo_utils/c11/term.h>
 
 #include "mswlua.hpp"
 
@@ -53,13 +53,15 @@ int main(){
 
     printf("%s", totalCDef.c_str());
     state.doScriptStr(totalCDef);
-    // state.doScriptStr("Beep(800, 500)");
+    state.doScriptStr("Beep(800, 500)");
 
     state.regValDefine(PI);
     state.doScriptStr("print(PI)");
 
     state.doScriptPath("./example/lua/autorun.lua");
     state.doFunc("api.debug.func");
+
+    state.addTempFunc("print_val").addTempArg(1).callFunc();
 
     return 0;
 }

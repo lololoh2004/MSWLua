@@ -37,8 +37,10 @@ public:
 
     // TOMMORROW ME PLEASE FIX THIS SHIII
     bool doFunc(std::string_view path);
+
+    luaState& addTempFunc(std::string_view tablePath);
     luaState& addTempArg(int num);
-    bool callFunc(std::string_view path);
+    bool callFunc();
 
     // TOMMORROW ME PLEASE FIX THIS SHIII
     bool doScriptPath(std::string_view content);
