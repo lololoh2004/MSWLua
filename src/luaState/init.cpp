@@ -1,5 +1,5 @@
 #include "mswlua/common.hpp"
-#include "mswlua/class/state.hpp"
+#include "mswlua/luaState/state.hpp"
 
 extern "C"{
 #include "lua.h"

@@ -4,6 +4,7 @@
 
 #include "mswlua/ffi/build_func_cdef.hpp"
 #include "mswlua/ffi/build_struct_cdef.hpp"
+#include "mswlua/funcCall/funcCall.hpp"
 
 #define PI 3.14
 
@@ -53,15 +54,16 @@ int main(){
 
     printf("%s", totalCDef.c_str());
     state.doScriptStr(totalCDef);
-    state.doScriptStr("Beep(800, 500)");
-
-    state.regValDefine(PI);
-    state.doScriptStr("print(PI)");
+    // state.doScriptStr("Beep(800, 500)");
 
     state.doScriptPath("./example/lua/autorun.lua");
-    state.doFunc("api.debug.func");
+    // state.doFunc("api.debug.func");
 
-    state.addTempFunc("print_val").addTempArg(1).callFunc();
+    // state.addTempFunc("print_val").addTempArg(1).callFunc();
+
+    auto printNumCall = funcCall(state.getRawState(), "print_val");
+    printNumCall.arg(1);
+    printNumCall.exec(nullptr);
 
     return 0;
 }

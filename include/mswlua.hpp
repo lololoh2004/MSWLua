@@ -1,4 +1,4 @@
 #pragma once
 
 #include "mswlua/common.hpp"
-#include "mswlua/class/state.hpp"
+#include "mswlua/luaState/state.hpp"
