@@ -5,6 +5,6 @@ function api.debug.func()
     print("debug")
 end
 
-function print_val(val)
+function api.print_val(val)
     print(val)
 end

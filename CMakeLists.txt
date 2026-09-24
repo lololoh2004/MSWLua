@@ -43,7 +43,6 @@ file(GLOB_RECURSE WRAPPER_SOURCES "src/*.cpp" "src/*.hpp")
 add_library(MSWLua_lib STATIC ${WRAPPER_SOURCES}
         include/mswlua/luaState/state.hpp
         src/luaState/init.cpp
-        src/luaState/run_func.cpp
         include/mswlua/ffi/build_struct_cdef.hpp
         src/ffi/build_struct_cdef.cpp
         include/mswlua/ffi/build_func_cdef.hpp
@@ -52,10 +51,8 @@ add_library(MSWLua_lib STATIC ${WRAPPER_SOURCES}
         src/luaState/reg.cpp
         src/luaState/run_script.cpp
         src/luaState/common.cpp
-        src/funcCall/control_temp_val.cpp
         include/mswlua/funcCall/funcCall.hpp
-        src/funcCall/func_info.cpp
-        src/funcCall/construct.cpp
+        src/funcCall/base.cpp
         src/funcCall/exec.cpp
 )
 

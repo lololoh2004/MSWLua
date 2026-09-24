@@ -6,19 +6,19 @@
 struct lua_State;
 
 class funcCall{
-    lua_State* m_state;
+    lua_State* m_state = nullptr;
+    const char* m_tablePath;
     int m_argCount = 0;
-    int m_funcIdx = 0;
-    int m_oldTopIdx = 0;
+    int m_funcIdx = -1;
 
-    void findProto(std::string_view tablePath);
+    void findByPath(std::string_view tablePath);
+    void findAndRefFunc();
 public:
     funcCall(lua_State* state, const char* tablePath);
-    funcCall(lua_State* state, int funcIdx);
     ~funcCall();
 
     funcCall& arg(int num);
-    void clearArgs() { m_argCount = 0; }
+    void exec(void* resultVar=nullptr);
 
-    void exec(void* resultVar);
+    void reload();
 };
