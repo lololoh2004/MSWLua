@@ -57,13 +57,11 @@ int main(){
     // state.doScriptStr("Beep(800, 500)");
 
     state.doScriptPath("./example/lua/autorun.lua");
-    // state.doFunc("api.debug.func");
 
-    // state.addTempFunc("print_val").addTempArg(1).callFunc();
-
-    auto printNumCall = funcCall(state.getRawState(), "print_val");
-    printNumCall.arg(1);
-    printNumCall.exec(nullptr);
+    auto printNumCall = funcCall(state.getRawState(), "api.print_val");
+    for (int i=0; i < 5; i++){
+        printNumCall.arg(1).exec();
+    }
 
     return 0;
 }
