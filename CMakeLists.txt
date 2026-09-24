@@ -41,18 +41,22 @@ endif()
 # === MSWLua Wrapper ===
 file(GLOB_RECURSE WRAPPER_SOURCES "src/*.cpp" "src/*.hpp")
 add_library(MSWLua_lib STATIC ${WRAPPER_SOURCES}
-        include/mswlua/class/state.hpp
-        src/class/state_init.cpp
-        src/class/state_run_func.cpp
+        include/mswlua/luaState/state.hpp
+        src/luaState/init.cpp
+        src/luaState/run_func.cpp
         include/mswlua/ffi/build_struct_cdef.hpp
         src/ffi/build_struct_cdef.cpp
         include/mswlua/ffi/build_func_cdef.hpp
         src/ffi/build_func_cdef.cpp
         include/mswlua/ffi/cdef_common.hpp
-        src/class/state_reg.cpp
-        src/class/state_run_script.cpp
-        src/class/state_common.cpp
-        src/class/control_temp_val.cpp
+        src/luaState/reg.cpp
+        src/luaState/run_script.cpp
+        src/luaState/common.cpp
+        src/funcCall/control_temp_val.cpp
+        include/mswlua/funcCall/funcCall.hpp
+        src/funcCall/func_info.cpp
+        src/funcCall/construct.cpp
+        src/funcCall/exec.cpp
 )
 
 target_include_directories(MSWLua_lib PUBLIC
