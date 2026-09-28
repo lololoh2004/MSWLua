@@ -16,9 +16,10 @@
 
 class funcBuilder{
     std::string m_funcName;
+    std::string m_funcPath;
+    void*       m_funcPtr = nullptr;
     std::string m_funcReturn;
     std::string m_funcArgs;
-    std::string m_funcPath;
 
     std::string m_cdefResult;
     std::string m_bindResult;
@@ -26,6 +27,8 @@ class funcBuilder{
     size_t m_argCount = 0;
     bool m_isFuncStarted = false;
 
+    void endFunc_ByCDef();
+    void endFunc_ByCast();
     void endFunc();
 public:
     funcBuilder()  = default;
@@ -35,6 +38,7 @@ public:
     funcBuilder& commitAll();
 
     funcBuilder& path(std::string_view path) { m_funcPath = path; return *this; };
+    funcBuilder& cPtr(void* ptr) { m_funcPtr = ptr; return *this; }
     funcBuilder& returnType(std::string_view type);
     funcBuilder& arg(std::string_view type, std::string_view name);
 
