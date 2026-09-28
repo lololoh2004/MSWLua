@@ -2,11 +2,14 @@
 #define TAB_LEN 4
 
 
-void funcBuilder::endFunc(){
+void funcBuilder::endFunc_ByCDef(){
+    // Tab.
     m_cdefResult += std::string(TAB_LEN * 1, ' ');
+    // Just name and '('
     m_cdefResult += m_funcReturn.empty() ? "void" : m_funcReturn;
     m_cdefResult += " " + m_funcName + "( ";
 
+    // Adding args.
     if (m_argCount > 0){
         if (m_funcArgs.length() >= 2)
             m_funcArgs.erase(m_funcArgs.length() - 2);
@@ -16,6 +19,7 @@ void funcBuilder::endFunc(){
     }
     m_cdefResult += " );\n";
 
+    // TablePath to func.
     if (m_funcPath.empty()){
         m_funcPath += "_G.";
     } else {
@@ -23,7 +27,18 @@ void funcBuilder::endFunc(){
             m_funcPath += ".";
     }
     m_bindResult += m_funcPath + m_funcName + " = ffi.C." + m_funcName + "\n";
+}
+void funcBuilder::endFunc_ByCast(){
 
+}
+
+void funcBuilder::endFunc(){
+    if (m_funcPtr != nullptr){
+        endFunc_ByCast();
+    } else {
+        endFunc_ByCDef();
+    }
+    // Reset class buf.
     m_funcArgs.clear();
     m_funcReturn.clear();
     m_funcPath.clear();

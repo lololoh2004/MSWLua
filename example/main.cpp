@@ -59,9 +59,9 @@ int main(){
     state.doScriptPath("./example/lua/autorun.lua");
 
     auto printNumCall = funcCall(state.getRawState(), "api.print_val");
-    for (int i=0; i < 5; i++){
-        printNumCall.arg(1).exec();
-    }
+    // for (int i=0; i < 105; i++){
+    //     printNumCall.arg(1).exec();
+    // }
 
     return 0;
 }

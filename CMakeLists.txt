@@ -14,18 +14,16 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}")
 # === My UtilsLib from FetchContent ===
 include(FetchContent)
 FetchContent_Declare(
-        LolohUtilsPack_raw
+        LolohUtilsPack
         GIT_REPOSITORY "https://github.com/lololoh2004/LolohUtilsPack.git"
         GIT_TAG        main
         SOURCE_DIR     "${CMAKE_CURRENT_SOURCE_DIR}/lib/LoUtils"
 )
-FetchContent_MakeAvailable(LolohUtilsPack_raw)
+FetchContent_MakeAvailable(LolohUtilsPack)
 
 
 # === OpenResty LuaJIT 2 ===
-add_library(LuaJIT_lib INTERFACE
-        include/mswlua/qol/parse_cfg_t1.hpp
-        include/mswlua/qol/parse_cfg_t2.h)
+add_library(LuaJIT_lib INTERFACE)
 
 target_include_directories(LuaJIT_lib INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/lib/luajit2/include")
 
@@ -41,19 +39,25 @@ endif()
 # === MSWLua Wrapper ===
 file(GLOB_RECURSE WRAPPER_SOURCES "src/*.cpp" "src/*.hpp")
 add_library(MSWLua_lib STATIC ${WRAPPER_SOURCES}
+        # INCLUDE
         include/mswlua/luaState/state.hpp
-        src/luaState/init.cpp
+        include/mswlua/funcCall/funcCall.hpp
         include/mswlua/ffi/build_struct_cdef.hpp
-        src/ffi/build_struct_cdef.cpp
         include/mswlua/ffi/build_func_cdef.hpp
-        src/ffi/build_func_cdef.cpp
         include/mswlua/ffi/cdef_common.hpp
+        include/mswlua/qol/parse_cfg_t1.hpp
+        include/mswlua/qol/parse_cfg_t2.hpp
+        # SOURCE
+        src/luaState/init.cpp
+        src/ffi/build_struct_cdef.cpp
+        src/ffi/build_func_cdef.cpp
         src/luaState/reg.cpp
         src/luaState/run_script.cpp
         src/luaState/common.cpp
-        include/mswlua/funcCall/funcCall.hpp
         src/funcCall/base.cpp
         src/funcCall/exec.cpp
+        src/qol/parse_cfg_t2.cpp
+        # NON SORTED
 )
 
 target_include_directories(MSWLua_lib PUBLIC
