@@ -29,9 +29,9 @@ target_include_directories(LuaJIT_lib INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/lib
 
 if(WIN32)
     set(LUA_SHARED_FILE "${CMAKE_CURRENT_SOURCE_DIR}/lib/luajit2/win64/lua51.dll")
-    target_link_libraries(LuaJIT_lib INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/lib/luajit2/win64/lua51.dll.a")
+    target_link_libraries(LuaJIT_lib INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/lib/luajit2/win64/lua51.lib")
 else()
-    set(LUA_SHARED_FILE "${CMAKE_CURRENT_SOURCE_DIR}/lib/luajit2/lin64/libluajit-5.1.so.2")
+    set(LUA_SHARED_FILE "${CMAKE_CURRENT_SOURCE_DIR}/lib/luajit2/lin64/lua51.so")
     target_link_libraries(LuaJIT_lib INTERFACE "${LUA_SHARED_FILE}")
 endif()
 
