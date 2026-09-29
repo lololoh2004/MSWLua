@@ -1,4 +1,5 @@
-#include <lo_utils/c11/term.h>
+#include <lo_utils/c11/term/term_sys_wrap.h>
+#include <lo_utils/cxx_wrap/term.hpp>
 
 #include "mswlua.hpp"
 
@@ -7,6 +8,10 @@
 #include "mswlua/funcCall/funcCall.hpp"
 
 #define PI 3.14
+
+void debug_func(int intStd){
+    term::msg(intStd, "LUA_SCRIPT", COLOR_CYAN);
+}
 
 int main(){
     termSetupEnv();
@@ -43,6 +48,10 @@ int main(){
         .returnType("int")
         .arg("unsigned long", "dwFreq")
         .arg("unsigned long", "dwDuration")
+    .createFunc("debug_func")
+        .cPtr(reinterpret_cast<void*>(debug_func))
+        .returnType("void")
+        .arg("int", "intStd")
     .commitAll();
 
     std::string totalCDef =
@@ -54,12 +63,12 @@ int main(){
 
     printf("%s", totalCDef.c_str());
     state.doScriptStr(totalCDef);
-    // state.doScriptStr("Beep(800, 500)");
 
+    state.doScriptStr("debug_func(800)");
     state.doScriptPath("./example/lua/autorun.lua");
 
     auto printNumCall = funcCall(state.getRawState(), "api.print_val");
-    // for (int i=0; i < 105; i++){
+    // lfor(105){
     //     printNumCall.arg(1).exec();
     // }
 
