@@ -9,7 +9,7 @@ void funcBuilder::endFunc_ByCDef(){
     m_cdefResult += std::string(TAB_LEN * 1, ' ');
     // Just return type, name and '('
     m_cdefResult += m_funcReturn.empty() ? "void" : m_funcReturn;
-    m_cdefResult += " " + m_funcName + "( ";
+    m_cdefResult += " " + m_funcName + " ( ";
 
     // Adding args.
     if (m_argCount > 0){
@@ -36,7 +36,7 @@ void funcBuilder::endFunc_ByCast(){
     // Just return type, proto. name and '('
     m_cdefResult += "typedef ";
     m_cdefResult += m_funcReturn.empty() ? "void" : m_funcReturn;
-    m_cdefResult += " (*" + m_funcName + ")(";
+    m_cdefResult += " ( *" + m_funcName + " )( ";
 
     // Adding args.
     if (m_argCount > 0){
@@ -46,7 +46,7 @@ void funcBuilder::endFunc_ByCast(){
     } else {
         m_cdefResult += "void";
     }
-    m_cdefResult += ");\n";
+    m_cdefResult += " );\n";
 
     // Func. address cast
     std::string castedFuncName = "casted_" + m_funcName;
@@ -62,6 +62,7 @@ void funcBuilder::endFunc_ByCast(){
         if (m_funcPath.back() != '.')
             m_funcPath += ".";
     }
+    // Cast part
     m_bindResult += m_funcPath + m_funcName + " = " + castedFuncName + "\n";
 }
 
