@@ -6,13 +6,15 @@ option(NO_DL_COPY "Disable auto-copy of dynamic lua lib" OFF)
 
 
 # === My UtilsLib from FetchContent ===
-include(FetchContent)
-FetchContent_Declare(
-        LolohUtilsPack
-        GIT_REPOSITORY "https://github.com/lololoh2004/LolohUtilsPack.git"
-        GIT_TAG        main
-)
-FetchContent_MakeAvailable(LolohUtilsPack)
+if(NOT TARGET LolohUtilsPack AND NOT TARGET LolohUtilsPack_cxx)
+    include(FetchContent)
+    FetchContent_Declare(
+            LolohUtilsPack
+            GIT_REPOSITORY "https://github.com/lololoh2004/LolohUtilsPack.git"
+            GIT_TAG        main
+    )
+    FetchContent_MakeAvailable(LolohUtilsPack)
+endif()
 
 
 # === OpenResty LuaJIT 2 ===
