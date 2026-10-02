@@ -46,12 +46,13 @@ add_library(MSWLua_lib STATIC ${WRAPPER_SOURCES}
         src/luaState/init.cpp
         src/ffi/build_struct_cdef.cpp
         src/ffi/build_func_cdef.cpp
-        src/luaState/reg.cpp
+        src/luaState/reg_val.cpp
         src/luaState/run_script.cpp
         src/luaState/common.cpp
         src/funcCall/base.cpp
         src/funcCall/exec.cpp
         src/qol/parse_cfg_t2.cpp
+        src/luaState/get_val.cpp
         # NON SORTED
 )
 
