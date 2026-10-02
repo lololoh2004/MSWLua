@@ -2,7 +2,6 @@
 
 #include "mswlua/common.hpp"
 #include <string_view>
-#include <cstdint>
 
 struct lua_State;
 enum class scriptSrc{
@@ -15,7 +14,7 @@ protected:
     lua_State* m_state;
 
     void reportErr() const;
-    bool doScript() const;
+    [[nodiscard]] bool doScript() const;
 public:
     luaState();
     ~luaState();
@@ -26,13 +25,22 @@ public:
     void openLibs();
     void openLibs(unsigned int flags);
 
+    // Val. funcs.
+    // Registration funcs.
     void regVal(int num, const char* name);
     void regVal(float fl, const char* name);
     void regVal(double db, const char* name);
     void regVal(const char* str, const char* name);
     void regVal(bool bl, const char* name);
+    // Getter funcs.
+    // LATER-ME PLEASE ADD SEARCH IN TABLES
+    // ALSO PUT THAT SHI ALGORITHM FROM funcCall IN COMMON
+    // AND REWORK COMMON FILE ARCH.
+    void getVal(int& var, const char* tablePath) const;
+    void getVal(float& var, const char* tablePath) const;
+    void getVal(bool& var, const char* tablePath) const;
+    void getVal(std::string& var, const char* tablePath) const;
 
-    // TOMMORROW ME PLEASE FIX THIS SHIII
     bool doScriptPath(std::string_view content);
     bool doScriptStr(std::string_view content);
 
