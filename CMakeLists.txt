@@ -18,7 +18,9 @@ endif()
 
 
 # === OpenResty LuaJIT 2 ===
-add_library(LuaJIT_lib INTERFACE)
+add_library(LuaJIT_lib INTERFACE
+        include/mswlua/common/find_by_path.h
+        src/common/find_by_path.cpp)
 
 target_include_directories(LuaJIT_lib INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/lib/luajit2/include")
 

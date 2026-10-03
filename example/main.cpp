@@ -49,7 +49,7 @@ int main(){
         .arg("unsigned long", "dwFreq")
         .arg("unsigned long", "dwDuration")
     .createFunc("debug_func")
-        .cPtr(reinterpret_cast<void*>(debug_func))
+        .cPtr(FN_TO_PTR(debug_func))
         .returnType("void")
         .arg("int", "intStd")
     .commitAll();
@@ -68,9 +68,32 @@ int main(){
     state.doScriptPath("./example/lua/autorun.lua");
 
     auto printNumCall = funcCall(state.getRawState(), "api.print_val");
+    printNumCall.arg(728).exec();
     // lfor(105){
     //     printNumCall.arg(1).exec();
     // }
 
+
+    // REG TEST
+    state.regValDef(PI);
+
+    state.regVal();
+
+
+    // GETTER TEST
+    int testVal1 = 0;
+    state.getVal(testVal1, "api.debug.val1.");
+    term::msg(testVal1, "api.debug.val1.", COLOR_WHITE);
+
+    float testVal2 = 0.0f;
+    state.getVal(testVal2, "api.debug.val2");
+    term::msg(testVal2, "api.debug.val2", COLOR_WHITE);
+
+    std::string testVal3;
+    state.getVal(testVal3, "api.debug.dir.val3");
+    term::msg(testVal3.c_str(), "api.debug.dir.val3", COLOR_WHITE);
+
+
+    // RETURN 0 SECTION ( VERY DANGEROUS )
     return 0;
 }

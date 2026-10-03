@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string_view>
-
 
 struct lua_State;
 
@@ -11,7 +9,7 @@ class funcCall{
     int m_argCount = 0;
     int m_funcIdx = -1;
 
-    void findByPath(std::string_view tablePath);
+    // void findByPath(std::string_view tablePath);
     void findAndRefFunc();
 public:
     funcCall(lua_State* state, const char* tablePath);

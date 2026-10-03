@@ -1,4 +1,4 @@
-#include "mswlua/common.hpp"
+#include "../../include/mswlua/common/types.hpp"
 #include "mswlua/luaState/state.hpp"
 
 extern "C"{
