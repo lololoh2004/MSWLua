@@ -5,7 +5,7 @@ extern "C"{
 #include "lua.h"
 #include "lauxlib.h"
 }
-#include "mswlua/common/find_by_path.h"
+#include "../../include/mswlua/c_api/path_funcs.hpp"
 
 
 void funcCall::findAndRefFunc(){

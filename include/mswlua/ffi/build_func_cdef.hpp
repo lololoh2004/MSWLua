@@ -3,7 +3,6 @@
 #include <string>
 #include <string_view>
 
-#define FN_TO_PTR(fn) reinterpret_cast<void*>(fn)
 
 // Mangling will be taken into account in the future
 // enum funcStandardType{

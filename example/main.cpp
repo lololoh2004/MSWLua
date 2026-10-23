@@ -1,7 +1,11 @@
-#include <lo_utils/c11/term/term_sys_wrap.h>
 #include <lo_utils/cxx_wrap/term.hpp>
 
-#include "mswlua.hpp"
+#include "mswlua/common/defines.hpp"
+#include "mswlua/c_api/doScript_funcs.hpp"
+#include "mswlua/c_api/getVal_funcs.hpp"
+#include "mswlua/c_api/init.hpp"
+#include "mswlua/c_api/openLib_funcs.hpp"
+#include "mswlua/c_api/regVal_funcs.hpp"
 
 #include "mswlua/ffi/build_func_cdef.hpp"
 #include "mswlua/ffi/build_struct_cdef.hpp"
@@ -9,89 +13,96 @@
 
 #define PI 3.14
 
-void debug_func(int intStd){
-    term::msg(intStd, "LUA_SCRIPT", COLOR_CYAN);
+void debug_func(int intVal){
+    term::msg(intVal, "LUA_SCRIPT", COLOR_CYAN);
 }
 
 int main(){
-    termSetupEnv();
+    term::setup();
 
-    luaState state;
-    state.openLibs(BaseLuaLib);
+    lua_State* state = getLuaState();
+    openLibs(state, BaseLuaLib);
 
-    // structBuilder cdefStructs;
-    // cdefStructs
-    // .createStruct("vec3")
-    //     .var("float", "x")
-    //     .var("float", "y")
-    //     .var("float", "z")
+
+    // REG ( funcs & structs ) TEST
+    term::mvLine();
+    term::mvLine();
+    term::msg("REG ( funcs & structs ) TEST", "MAIN_CXX", COLOR_GREEN);
+
+    structBuilder structBind;
+    structBind
+    .createStruct("vec3")
+        .var("float", "x")
+        .var("float", "y")
+        .var("float", "z")
     // .createStruct("rgba_c")
     //     .var("char", "r")
     //     .var("char", "g")
     //     .var("char", "b")
     //     .var("char", "a")
-    // .commitAll();
+    .commitAll();
     //
     // printf("%s", cdefStructs.getCDefContent().c_str());
 
-    funcBuilder funcStructs;
-    funcStructs
-    // .createFunc("foo")
-    //     .path("api")
-    //     .returnType("void")
-    //     .arg("float", "x")
-    //     .arg("float", "y")
-    //     .arg("float", "z")
-    // .createFunc("foosttt")
-    //     .returnType("void")
-    .createFunc("Beep")
-        .returnType("int")
-        .arg("unsigned long", "dwFreq")
-        .arg("unsigned long", "dwDuration")
-    .createFunc("debug_func")
+    funcBuilder funcBind;
+    funcBind
+    .createFunc("func")
+        .path("debug")
         .cPtr(FN_TO_PTR(debug_func))
         .returnType("void")
-        .arg("int", "intStd")
+        .arg("int", "intVal")
     .commitAll();
 
     std::string totalCDef =
         std::string("local ffi = require(\"ffi\")\n") +
         "ffi.cdef[[\n" +
-        funcStructs.getCDefContent() +
+        structBind.getCDefContent() +
+        funcBind.getCDefContent() +
         "]]\n" +
-        funcStructs.getBindContent();
+        structBind.getBindContent() +
+        funcBind.getBindContent();
 
+    term::mvLine();
     printf("%s", totalCDef.c_str());
-    state.doScriptStr(totalCDef);
+    doScriptStr(state, totalCDef);
 
-    state.doScriptStr("debug_func(800)");
-    state.doScriptPath("./example/lua/autorun.lua");
 
-    auto printNumCall = funcCall(state.getRawState(), "api.print_val");
+    // DO & CALL TEST
+    term::mvLine();
+    term::msg("DO & CALL TEST", "MAIN_CXX", COLOR_GREEN);
+    doScriptStr(state, "debug.func(800)");
+    doScriptPath(state, "./example/lua/autorun.lua");
+
+    auto printNumCall = funcCall(state, "api.print_val");
     printNumCall.arg(728).exec();
-    // lfor(105){
-    //     printNumCall.arg(1).exec();
-    // }
 
 
-    // REG TEST
-    state.regValDef(PI);
+    // REG ( values & defines ) TEST
+    term::mvLine();
+    term::msg("REG ( values & defines ) TEST", "MAIN_CXX", COLOR_GREEN);
 
-    state.regVal();
+    regValDef(state, PI);
+    regVal(state, 24, "debug.num.real_num");
+    int testVal1_1;
+    getVal(state, testVal1_1, "debug.num.real_num");
+    term::msg(testVal1_1, "debug.num.real_num", COLOR_WHITE);
 
 
     // GETTER TEST
-    int testVal1 = 0;
-    state.getVal(testVal1, "api.debug.val1.");
-    term::msg(testVal1, "api.debug.val1.", COLOR_WHITE);
+    term::mvLine();
+    term::msg("GETTER TEST", "MAIN_CXX", COLOR_GREEN);
 
-    float testVal2 = 0.0f;
-    state.getVal(testVal2, "api.debug.val2");
-    term::msg(testVal2, "api.debug.val2", COLOR_WHITE);
+    int testVal2_1 = 0;
+    getVal(state, testVal2_1, "api.debug.val1.");
+    term::msg(testVal2_1, "api.debug.val1.", COLOR_WHITE);
 
-    std::string testVal3;
-    state.getVal(testVal3, "api.debug.dir.val3");
-    term::msg(testVal3.c_str(), "api.debug.dir.val3", COLOR_WHITE);
+    float testVal2_2 = 0.0f;
+    getVal(state, testVal2_2, "api.debug.val2");
+    term::msg(testVal2_2, "api.debug.val2", COLOR_WHITE);
+
+    std::string testVal2_3;
+    getVal(state, testVal2_3, "api.debug.dir.val3");
+    term::msg(testVal2_3.c_str(), "api.debug.dir.val3", COLOR_WHITE);
 
 
     // RETURN 0 SECTION ( VERY DANGEROUS )

@@ -1,12 +1,12 @@
-#include "mswlua/common/find_by_path.h"
+#include "../../../include/mswlua/c_api/path_funcs.hpp"
 extern "C"{
 #include <lua.h>
 }
 #include <string>
 
 
-void findByPath(lua_State* state, std::string_view tablePath){
-    if (!state) return;
+void findByPath(lua_State* L, std::string_view tablePath){
+    if (!L) return;
     // Small QoL addition
     if (tablePath.back() == '.')
         tablePath.remove_suffix(1);
@@ -19,7 +19,7 @@ void findByPath(lua_State* state, std::string_view tablePath){
     token = tablePath.substr(startPos, endPos - startPos);
 
     // First iteration ( via lua_getglobal )
-    lua_getglobal(state, token.c_str());
+    lua_getglobal(L, token.c_str());
 
     // Another iterations ( via lua_getfield )
     while (endPos != std::string_view::npos){
@@ -27,7 +27,7 @@ void findByPath(lua_State* state, std::string_view tablePath){
         endPos = tablePath.find('.', startPos);
 
         token = tablePath.substr(startPos, endPos - startPos);
-        lua_getfield(state, -1, token.c_str());
-        lua_remove(state, -2);
+        lua_getfield(L, -1, token.c_str());
+        lua_remove(L, -2);
     }
 }

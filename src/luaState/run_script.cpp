@@ -1,4 +1,4 @@
-#include "mswlua/luaState/state.hpp"
+#include "mswlua/c_api/report_funcs.hpp"
 
 extern "C"{
 #include "lua.h"
@@ -9,28 +9,28 @@ extern "C"{
 #include <string_view>
 
 
-bool luaState::doScript() const{
-    int callStatus = lua_pcall(m_state, 0, LUA_MULTRET, 0);
+bool doScript(lua_State* L){
+    int callStatus = lua_pcall(L, 0, LUA_MULTRET, 0);
     if (callStatus != LUA_OK){
-        reportErr(); return false;
+        reportErr(L); return false;
     }
     return true;
 }
-bool luaState::doScriptPath(std::string_view content){
+bool doScriptPath(lua_State* L, std::string_view content){
     std::string content_str(content);
 
-    int loadStatus = luaL_loadfile(m_state, content_str.c_str());
+    int loadStatus = luaL_loadfile(L, content_str.c_str());
     if (loadStatus != LUA_OK) {
-        reportErr(); return false;
+        reportErr(L); return false;
     }
-    return doScript();
+    return doScript(L);
 }
-bool luaState::doScriptStr(std::string_view content){
+bool doScriptStr(lua_State* L, std::string_view content){
     std::string content_str(content);
 
-    int loadStatus = luaL_loadstring(m_state, content_str.c_str());
+    int loadStatus = luaL_loadstring(L, content_str.c_str());
     if (loadStatus != LUA_OK) {
-        reportErr(); return false;
+        reportErr(L); return false;
     }
-    return doScript();
+    return doScript(L);
 }

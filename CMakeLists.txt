@@ -19,8 +19,9 @@ endif()
 
 # === OpenResty LuaJIT 2 ===
 add_library(LuaJIT_lib INTERFACE
-        include/mswlua/common/find_by_path.h
-        src/common/find_by_path.cpp)
+        include/mswlua/c_api/path_funcs.hpp
+        src/c_api/path_funcs/find_by_path.cpp
+)
 
 target_include_directories(LuaJIT_lib INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/lib/luajit2/include")
 
@@ -37,25 +38,29 @@ endif()
 file(GLOB_RECURSE WRAPPER_SOURCES "src/*.cpp" "src/*.hpp")
 add_library(MSWLua_lib STATIC ${WRAPPER_SOURCES}
         # INCLUDE
-        include/mswlua/luaState/state.hpp
         include/mswlua/funcCall/funcCall.hpp
         include/mswlua/ffi/build_struct_cdef.hpp
         include/mswlua/ffi/build_func_cdef.hpp
         include/mswlua/ffi/cdef_common.hpp
-        include/mswlua/qol/parse_cfg_t1.hpp
-        include/mswlua/qol/parse_cfg_t2.hpp
         # SOURCE
         src/luaState/init.cpp
         src/ffi/build_struct_cdef.cpp
         src/ffi/build_func_cdef.cpp
-        src/luaState/reg_val.cpp
+        src/c_api/regVal_funcs.cpp
         src/luaState/run_script.cpp
-        src/luaState/common.cpp
+        src/c_api/report_funcs.cpp
         src/funcCall/base.cpp
         src/funcCall/exec.cpp
-        src/qol/parse_cfg_t2.cpp
-        src/luaState/get_val.cpp
-        # NON SORTED
+        src/c_api/getVal_funcs.cpp
+        src/c_api/path_funcs/create_path.cpp
+        include/mswlua/c_api/regVal_funcs.hpp
+        include/mswlua/common/defines.hpp
+        include/mswlua/c_api/getVal_funcs.hpp
+        include/mswlua/c_api/doScript_funcs.hpp
+        include/mswlua/c_api/report_funcs.hpp
+        include/mswlua/c_api/openLib_funcs.hpp
+        src/c_api/openLib_funcs.cpp
+        include/mswlua/c_api/init.hpp
 )
 
 target_include_directories(MSWLua_lib PUBLIC
