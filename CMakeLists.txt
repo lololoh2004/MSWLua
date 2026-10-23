@@ -7,41 +7,36 @@ option(NO_DL_COPY "Disable auto-copy of dynamic lua lib" OFF)
 
 # === My UtilsLib from FetchContent ===
 if(NOT TARGET LolohUtilsPack AND NOT TARGET LolohUtilsPack_cxx)
-    include(FetchContent)
-    FetchContent_Declare(
-            LolohUtilsPack
-            GIT_REPOSITORY "https://github.com/lololoh2004/LolohUtilsPack.git"
-            GIT_TAG        main
-    )
-    FetchContent_MakeAvailable(LolohUtilsPack)
+    add_subdirectory(lib/LoUtils)
 endif()
 
 
-# === OpenResty LuaJIT 2 ===
-add_library(LuaJIT_lib INTERFACE
-        include/mswlua/c_api/path_funcs.hpp
-        src/c_api/path_funcs/find_by_path.cpp
-)
-
+# === LuaJIT ===
+add_library(LuaJIT_lib INTERFACE)
 target_include_directories(LuaJIT_lib INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/lib/luajit2/include")
 
 if(WIN32)
-    set(LUA_SHARED_FILE "${CMAKE_CURRENT_SOURCE_DIR}/lib/luajit2/win64/lua51.dll")
     target_link_libraries(LuaJIT_lib INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/lib/luajit2/win64/lua51.lib")
 else()
-    set(LUA_SHARED_FILE "${CMAKE_CURRENT_SOURCE_DIR}/lib/luajit2/lin64/lua51.so")
-    target_link_libraries(LuaJIT_lib INTERFACE "${LUA_SHARED_FILE}")
+    target_link_libraries(LuaJIT_lib INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/lib/luajit2/lin64/lua51.so")
 endif()
 
 
 # === MSWLua Wrapper ===
-file(GLOB_RECURSE WRAPPER_SOURCES "src/*.cpp" "src/*.hpp")
-add_library(MSWLua_lib STATIC ${WRAPPER_SOURCES}
+add_library(MSWLua_lib STATIC
         # INCLUDE
         include/mswlua/funcCall/funcCall.hpp
         include/mswlua/ffi/build_struct_cdef.hpp
         include/mswlua/ffi/build_func_cdef.hpp
         include/mswlua/ffi/cdef_common.hpp
+        include/mswlua/c_api/regVal_funcs.hpp
+        include/mswlua/common/defines.hpp
+        include/mswlua/c_api/getVal_funcs.hpp
+        include/mswlua/c_api/doScript_funcs.hpp
+        include/mswlua/c_api/report_funcs.hpp
+        include/mswlua/c_api/openLib_funcs.hpp
+        include/mswlua/c_api/init.hpp
+        include/mswlua/c_api/path_funcs.hpp
         # SOURCE
         src/luaState/init.cpp
         src/ffi/build_struct_cdef.cpp
@@ -53,45 +48,33 @@ add_library(MSWLua_lib STATIC ${WRAPPER_SOURCES}
         src/funcCall/exec.cpp
         src/c_api/getVal_funcs.cpp
         src/c_api/path_funcs/create_path.cpp
-        include/mswlua/c_api/regVal_funcs.hpp
-        include/mswlua/common/defines.hpp
-        include/mswlua/c_api/getVal_funcs.hpp
-        include/mswlua/c_api/doScript_funcs.hpp
-        include/mswlua/c_api/report_funcs.hpp
-        include/mswlua/c_api/openLib_funcs.hpp
         src/c_api/openLib_funcs.cpp
-        include/mswlua/c_api/init.hpp
+        src/c_api/path_funcs/find_by_path.cpp
 )
 
-target_include_directories(MSWLua_lib PUBLIC
-        src
+target_include_directories(MSWLua_lib
+        PUBLIC
         include
+
+        PRIVATE
+        src
 )
 
-target_link_libraries(MSWLua_lib PUBLIC LolohUtilsPack_cxx LuaJIT_lib)
+target_link_libraries(MSWLua_lib
+        PUBLIC
+        LolohUtilsPack_cxx
+        LuaJIT_lib
+)
 
 
 # === Example with CXX ===
-add_executable(MSWLua_example
-        example/main.cpp
-)
-target_link_libraries(MSWLua_example PRIVATE LolohUtilsPack_cxx MSWLua_lib)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    add_executable(MSWLua_example
+            example/main.cpp
+    )
+    target_link_libraries(MSWLua_example PRIVATE LolohUtilsPack_cxx MSWLua_lib)
 
-
-# === Custom Cmds ===
-if(NOT NO_DL_COPY)
-    if(WIN32)
-        add_custom_command(TARGET MSWLua_example POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                "${LUA_SHARED_FILE}"
-                "$<TARGET_FILE_DIR:MSWLua_example>"
-        )
-    else()
+    if(UNIX AND NOT APPLE)
         target_link_options(MSWLua_example PRIVATE "-Wl,-rpath,$ORIGIN")
-        add_custom_command(TARGET MSWLua_example POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                "${LUA_SHARED_FILE}"
-                "$<TARGET_FILE_DIR:MSWLua_example>"
-        )
     endif()
 endif()
