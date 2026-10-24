@@ -47,7 +47,7 @@ int main(){
     funcBuilder funcBind;
     funcBind
     .createFunc("func")
-        .path("debug")
+        .luaPath("debug")
         .cPtr(FN_TO_PTR(debug_func))
         .returnType("void")
         .arg("int", "intVal")

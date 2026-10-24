@@ -5,16 +5,13 @@
 
 
 // Mangling will be taken into account in the future
-// enum funcStandardType{
-//     StandardC,
-//     GNU_CXX
-// };
-// enum funcRegistType{
-//     StandardC,
+// enum funcMangling{
+//     StandardC = 0,
 //     GNU_CXX
 // };
 
 class funcBuilder{
+    // funcMangling m_mangling;
     std::string m_funcName;
     std::string m_funcPath;
     void*       m_funcPtr = nullptr;
@@ -29,6 +26,7 @@ class funcBuilder{
 
     void endFunc_ByCDef();
     void endFunc_ByCast();
+    // void simulateMangling();
     void endFunc();
 public:
     funcBuilder()  = default;
@@ -37,8 +35,9 @@ public:
     funcBuilder& createFunc(std::string_view name, void* directPtr = nullptr);
     funcBuilder& commitAll();
 
-    funcBuilder& path(std::string_view path) { m_funcPath = path; return *this; };
-    funcBuilder& cPtr(void* ptr) { m_funcPtr = ptr; return *this; }
+    // funcBuilder& mangling(funcMangling type)    { m_mangling = type; return *this; }
+    funcBuilder& luaPath(std::string_view path) { m_funcPath = path; return *this; }
+    funcBuilder& cPtr(void* ptr)                { m_funcPtr = ptr; return *this; }
     funcBuilder& returnType(std::string_view type);
     funcBuilder& arg(std::string_view type, std::string_view name);
 

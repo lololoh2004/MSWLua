@@ -5,65 +5,72 @@
 
 
 void funcBuilder::endFunc_ByCDef(){
-    // Tab.
-    m_cdefResult += std::string(TAB_LEN * 1, ' ');
-    // Just return type, name and '('
-    m_cdefResult += m_funcReturn.empty() ? "void" : m_funcReturn;
-    m_cdefResult += " " + m_funcName + " ( ";
+    // Just tab, return type, name and '('
+    m_cdefResult += std::format(
+    "{:>{}}{} {} ( ",
+        "", TAB_LEN,
+        m_funcReturn, m_funcName
+    );
 
     // Adding args.
     if (m_argCount > 0){
         if (m_funcArgs.length() >= 2)
             m_funcArgs.erase(m_funcArgs.length() - 2);
-        m_cdefResult += m_funcArgs;
+        m_cdefResult.append(m_funcArgs);
     } else {
-        m_cdefResult += "void";
+        m_cdefResult.append("void");
     }
-    m_cdefResult += " );\n";
+    m_cdefResult.append(" );\n");
 
     // TablePath to func.
     if (m_funcPath.empty()){
-        m_funcPath += "_G.";
+        m_funcPath.append("_G.");
     } else {
         if (m_funcPath.back() != '.')
-            m_funcPath += ".";
+            m_funcPath.append(".");
     }
-    m_bindResult += m_funcPath + m_funcName + " = ffi.C." + m_funcName + "\n";
+    m_bindResult += std::format(
+        "{0}{1} = ffi.C.{1}\n",
+        m_funcPath, m_funcName
+    );
 }
 void funcBuilder::endFunc_ByCast(){
-    // Tab.
-    m_cdefResult += std::string(TAB_LEN * 1, ' ');
-    // Just return type, proto. name and '('
-    m_cdefResult += "typedef ";
-    m_cdefResult += m_funcReturn.empty() ? "void" : m_funcReturn;
-    m_cdefResult += " ( *" + m_funcName + " )( ";
+    // Just tab, return type, name and '('
+    m_cdefResult += std::format(
+    "{:>{}}typedef {} ( *{} )( ",
+        "", TAB_LEN,
+        m_funcReturn, m_funcName
+    );
 
     // Adding args.
     if (m_argCount > 0){
         if (m_funcArgs.length() >= 2)
             m_funcArgs.erase(m_funcArgs.length() - 2);
-        m_cdefResult += m_funcArgs;
+        m_cdefResult.append(m_funcArgs);
     } else {
-        m_cdefResult += "void";
+        m_cdefResult.append("void");
     }
-    m_cdefResult += " );\n";
+    m_cdefResult.append(" );\n");
 
     // Func. address cast
-    std::string castedFuncName = "casted_" + m_funcName;
-    m_bindResult +=
-        "local " + castedFuncName + " = " +
-        "ffi.cast('" + m_funcName + "', "  + std::format("{}", m_funcPtr) +
-        ")\n";
+    m_bindResult += std::format(
+        "local __{0} = ffi.cast( '{0}', 0x{1:X}ULL )\n",
+        m_funcName,
+        reinterpret_cast<uintptr_t>(m_funcPtr)
+    );
 
     // TablePath to func.
     if (m_funcPath.empty()){
-        m_funcPath += "_G.";
+        m_funcPath.append("_G.");
     } else {
         if (m_funcPath.back() != '.')
-            m_funcPath += ".";
+            m_funcPath.append(".");
     }
     // Cast part
-    m_bindResult += m_funcPath + m_funcName + " = " + castedFuncName + "\n";
+    m_bindResult += std::format(
+        "{0}{1} = __{1}\n",
+        m_funcPath, m_funcName
+    );
 }
 
 void funcBuilder::endFunc(){
@@ -84,7 +91,9 @@ funcBuilder& funcBuilder::createFunc(std::string_view name, void* directPtr){
         endFunc();
 
     m_funcName = name;
+    m_funcPtr = directPtr;
     m_argCount = 0;
+    m_funcReturn = "void";
     m_isFuncStarted = true;
 
     return *this;
@@ -99,7 +108,11 @@ funcBuilder& funcBuilder::returnType(std::string_view type){
 funcBuilder& funcBuilder::arg(std::string_view type, std::string_view name){
     if (!m_isFuncStarted) return *this;
 
-    m_funcArgs += std::string(type) + " " + std::string(name) + ", ";
+    m_funcArgs.append(type)
+        .append(" ")
+        .append(name)
+        .append(", ");
+
     m_argCount++;
 
     return *this;
