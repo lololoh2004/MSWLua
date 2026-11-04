@@ -1,56 +1,96 @@
 #include "mswlua/ffi/build_func_cdef.hpp"
+
+#include <cassert>
 #include <format>
 
-#define TAB_LEN 4
+constexpr std::string_view TAB = "    ";
 
 
-void funcBuilder::endFunc_ByCDef(){
-    // Just tab, return type, name and '('
-    m_cdefResult += std::format(
-    "{:>{}}{} {} ( ",
-        "", TAB_LEN,
-        m_funcReturn, m_funcName
-    );
-
-    // Adding args.
+void funcBuilder::_addArgs(){
     if (m_argCount > 0){
         if (m_funcArgs.length() >= 2)
-            m_funcArgs.erase(m_funcArgs.length() - 2);
+            m_funcArgs.resize(m_funcArgs.length() - 2);
+
         m_cdefResult.append(m_funcArgs);
     } else {
         m_cdefResult.append("void");
     }
     m_cdefResult.append(" );\n");
-
-    // TablePath to func.
-    if (m_funcPath.empty()){
-        m_funcPath.append("_G.");
-    } else {
-        if (m_funcPath.back() != '.')
-            m_funcPath.append(".");
-    }
-    m_bindResult += std::format(
-        "{0}{1} = ffi.C.{1}\n",
-        m_funcPath, m_funcName
-    );
 }
-void funcBuilder::endFunc_ByCast(){
-    // Just tab, return type, name and '('
+
+std::string funcBuilder::_getLuaPath(){
+    if (m_funcPath.empty()){
+        return "_G.";
+    }
+    if (m_funcPath.back() != '.'){
+        return m_funcPath + ".";
+    }
+    return m_funcPath;
+}
+
+std::string funcBuilder::_getMangledName(){
+    std::string mangled = std::format("_Z{}{}", m_funcName.length(), m_funcName);
+
+    if (m_funcMangledArgs.empty()){
+        mangled.append("v");
+    } else{
+        mangled.append(m_funcMangledArgs);
+    }
+    return mangled;
+
+}
+std::string funcBuilder::_getMangledType(std::string_view type) const{
+    // Only GNU
+    if (type == "int")         return "i";
+    if (type == "float")       return "f";
+    if (type == "double")      return "d";
+    if (type == "char")        return "c";
+    if (type == "void")        return "v";
+    if (type == "char*")       return "Pc";
+    if (type == "const char*") return "PKc";
+
+    return "";
+}
+
+void funcBuilder::_endFuncCDef(){
+    switch (m_mangling){
+        case GNU_CXX:
+            m_cdefResult += std::format(
+                "{}{} {} ( ",
+                TAB, m_funcReturn, _getMangledName()
+            );
+            // Adding args.
+            _addArgs();
+
+            m_bindResult += std::format(
+                "{0}{1} = ffi.C.{2}\n",
+                _getLuaPath(), m_funcName, _getMangledName()
+            );
+            break;
+        default:
+            m_cdefResult += std::format(
+                "{}{} {} ( ",
+                TAB, m_funcReturn, m_funcName
+            );
+            // Adding args.
+            _addArgs();
+
+            m_bindResult += std::format(
+                "{0}{1} = ffi.C.{1}\n",
+                _getLuaPath(), m_funcName
+            );
+            break;
+    }
+}
+void funcBuilder::_endFuncCast(){
     m_cdefResult += std::format(
-    "{:>{}}typedef {} ( *{} )( ",
-        "", TAB_LEN,
+    "{}typedef {} ( *{} )( ",
+        TAB,
         m_funcReturn, m_funcName
     );
 
     // Adding args.
-    if (m_argCount > 0){
-        if (m_funcArgs.length() >= 2)
-            m_funcArgs.erase(m_funcArgs.length() - 2);
-        m_cdefResult.append(m_funcArgs);
-    } else {
-        m_cdefResult.append("void");
-    }
-    m_cdefResult.append(" );\n");
+    _addArgs();
 
     // Func. address cast
     m_bindResult += std::format(
@@ -59,39 +99,33 @@ void funcBuilder::endFunc_ByCast(){
         reinterpret_cast<uintptr_t>(m_funcPtr)
     );
 
-    // TablePath to func.
-    if (m_funcPath.empty()){
-        m_funcPath.append("_G.");
-    } else {
-        if (m_funcPath.back() != '.')
-            m_funcPath.append(".");
-    }
     // Cast part
     m_bindResult += std::format(
         "{0}{1} = __{1}\n",
-        m_funcPath, m_funcName
+        _getLuaPath(), m_funcName
     );
 }
 
 void funcBuilder::endFunc(){
     if (m_funcPtr != nullptr){
-        endFunc_ByCast();
+        _endFuncCast();
     } else {
-        endFunc_ByCDef();
+        _endFuncCDef();
     }
     // Reset class buf.
+    m_funcMangledArgs.clear();
     m_funcArgs.clear();
     m_funcReturn.clear();
-    m_funcPath.clear();
+    m_funcPtr = nullptr;
+    m_argCount = 0;
     m_isFuncStarted = false;
 }
 
-funcBuilder& funcBuilder::createFunc(std::string_view name, void* directPtr){
+funcBuilder& funcBuilder::createFunc(std::string_view name){
     if (m_isFuncStarted)
         endFunc();
 
     m_funcName = name;
-    m_funcPtr = directPtr;
     m_argCount = 0;
     m_funcReturn = "void";
     m_isFuncStarted = true;
@@ -99,28 +133,33 @@ funcBuilder& funcBuilder::createFunc(std::string_view name, void* directPtr){
     return *this;
 }
 funcBuilder& funcBuilder::returnType(std::string_view type){
-    if (!m_isFuncStarted) return *this;
+    assert(m_isFuncStarted && "MSWLUA GEN ERROR : returnType() call before createFunc()!");
 
     m_funcReturn = type;
+
 
     return *this;
 }
 funcBuilder& funcBuilder::arg(std::string_view type, std::string_view name){
-    if (!m_isFuncStarted) return *this;
+    assert(m_isFuncStarted && "MSWLUA GEN ERROR : arg() call before createFunc()!");
 
     m_funcArgs.append(type)
         .append(" ")
         .append(name)
         .append(", ");
-
     m_argCount++;
+
+    if (m_mangling != StandardC){
+        m_funcMangledArgs.append(_getMangledType(type));
+    }
 
     return *this;
 }
 
 funcBuilder& funcBuilder::commitAll(){
-    if (m_isFuncStarted)
+    if (m_isFuncStarted){
         endFunc();
+    }
 
     return *this;
 }

@@ -11,7 +11,18 @@
 #include "mswlua/ffi/build_struct_cdef.hpp"
 #include "mswlua/funcCall/funcCall.hpp"
 
+#ifdef _WIN32
+#   define EXPORT_MACRO __declspec(dllexport)
+#else
+#   define EXPORT_MACRO __attribute__((visibility("default")))
+#endif
+
 #define PI 3.14
+
+
+EXPORT_MACRO void debug_mangled_func(){
+    term::msg("MANGLE IS OOOOVER", "LUA_SCRIPT", COLOR_CYAN);
+}
 
 void debug_func(int intVal){
     term::msg(intVal, "LUA_SCRIPT", COLOR_CYAN);
@@ -51,6 +62,10 @@ int main(){
         .cPtr(FN_TO_PTR(debug_func))
         .returnType("void")
         .arg("int", "intVal")
+    .createFunc("debug_mangled_func")
+        .mangling(GNU_CXX)
+        .luaPath("debug")
+        .returnType("void")
     .commitAll();
 
     std::string totalCDef =
@@ -70,6 +85,7 @@ int main(){
     // DO & CALL TEST
     term::mvLine();
     term::msg("DO & CALL TEST", "MAIN_CXX", COLOR_GREEN);
+    doScriptStr(state, "debug.debug_mangled_func()");
     doScriptStr(state, "debug.func(800)");
     doScriptPath(state, "./example/lua/autorun.lua");
 

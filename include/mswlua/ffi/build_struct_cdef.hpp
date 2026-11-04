@@ -2,7 +2,6 @@
 
 #include <string>
 #include <string_view>
-#include <vector>
 
 
 class structBuilder{
@@ -10,7 +9,6 @@ class structBuilder{
     std::string m_bindResult;
 
     std::string m_structName;
-    std::vector<std::string> m_methods;
 
     size_t m_fieldCount    = 0;
     bool m_hasMethods      = false;
