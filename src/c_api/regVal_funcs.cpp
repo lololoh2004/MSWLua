@@ -5,7 +5,7 @@ extern "C"{
 
 static void regVal_SharedStart(lua_State* state, std::string_view tablePath){
     // Small QoL addition
-    if (tablePath.back() == '.')
+    if (!tablePath.empty() && tablePath.back() == '.')
         tablePath.remove_suffix(1);
 
     // Find <path> and <variable name> parts

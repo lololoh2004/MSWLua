@@ -1,4 +1,4 @@
-#include <lo_utils/cxx_wrap/term.hpp>
+#include "mswlua/log_hook.hpp"
 #include "mswlua/funcCall/funcCall.hpp"
 
 extern "C"{
@@ -23,7 +23,7 @@ void funcCall::exec(void* resultVar){
 
     int result = lua_pcall(m_state, tempArgCount, LUA_MULTRET, 0);
     if (result != LUA_OK){
-        term::msg(lua_tostring(m_state, -1), "LUA");
+        MSWLuaLog(lua_tostring(m_state, -1), "LUA");
         return;
     }
 }

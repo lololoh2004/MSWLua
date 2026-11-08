@@ -1,14 +1,7 @@
 cmake_minimum_required(VERSION 4.1)
 project(MSWLua LANGUAGES C CXX)
 
-set(CMAKE_CXX_STANDARD 20)
-option(NO_DL_COPY "Disable auto-copy of dynamic lua lib" OFF)
-
-
-# === My UtilsLib from FetchContent ===
-if(NOT TARGET LolohUtilsPack AND NOT TARGET LolohUtilsPack_cxx)
-    add_subdirectory(lib/LoUtils)
-endif()
+set(CMAKE_CXX_STANDARD 23)
 
 
 # === LuaJIT ===
@@ -50,6 +43,8 @@ add_library(MSWLua_lib STATIC
         src/c_api/path_funcs/create_path.cpp
         src/c_api/openLib_funcs.cpp
         src/c_api/path_funcs/find_by_path.cpp
+        include/mswlua/log_hook.hpp
+        src/log_hook.cpp
 )
 
 target_include_directories(MSWLua_lib
@@ -62,7 +57,6 @@ target_include_directories(MSWLua_lib
 
 target_link_libraries(MSWLua_lib
         PUBLIC
-        LolohUtilsPack_cxx
         LuaJIT_lib
 )
 
@@ -72,7 +66,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     add_executable(MSWLua_example
             example/main.cpp
     )
-    target_link_libraries(MSWLua_example PRIVATE LolohUtilsPack_cxx MSWLua_lib)
+    target_link_libraries(MSWLua_example PRIVATE MSWLua_lib)
 
     if(UNIX AND NOT APPLE)
         target_link_options(MSWLua_example PRIVATE "-Wl,-rpath,$ORIGIN")

@@ -1,18 +1,19 @@
 #include "mswlua/funcCall/funcCall.hpp"
-#include <lo_utils/cxx_wrap/term.hpp>
+
+#include "mswlua/log_hook.hpp"
+#include "mswlua/c_api/path_funcs.hpp"
 
 extern "C"{
 #include "lua.h"
 #include "lauxlib.h"
 }
-#include "../../include/mswlua/c_api/path_funcs.hpp"
 
 
 void funcCall::findAndRefFunc(){
     findByPath(m_state, m_tablePath);
 
     if (lua_isnil(m_state, -1)){
-        term::msg("Path is invalid", "MSWLUA");
+        MSWLuaLog("Path is invalid", "MSWLUA");
         lua_pop(m_state, 1);
         return;
     }
