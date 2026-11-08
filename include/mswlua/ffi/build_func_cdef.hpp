@@ -4,7 +4,6 @@
 #include <string_view>
 
 
-// Mangling will be taken into account in the future
 enum funcMangling{
     StandardC = 0,
     GNU_CXX
@@ -27,7 +26,7 @@ class funcBuilder{
 
 
     std::string _getMangledName();
-    std::string _getMangledType(std::string_view type) const;
+    [[nodiscard]] std::string _getMangledType(std::string_view type) const;
     std::string _getLuaPath();
 
     void _addArgs();

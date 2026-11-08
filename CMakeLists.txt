@@ -21,7 +21,6 @@ add_library(MSWLua_lib STATIC
         include/mswlua/funcCall/funcCall.hpp
         include/mswlua/ffi/build_struct_cdef.hpp
         include/mswlua/ffi/build_func_cdef.hpp
-        include/mswlua/ffi/cdef_common.hpp
         include/mswlua/c_api/regVal_funcs.hpp
         include/mswlua/common/defines.hpp
         include/mswlua/c_api/getVal_funcs.hpp
@@ -45,6 +44,8 @@ add_library(MSWLua_lib STATIC
         src/c_api/path_funcs/find_by_path.cpp
         include/mswlua/log_hook.hpp
         src/log_hook.cpp
+        include/mswlua/ffi/new_func_builder.hpp
+        src/ffi/new_func_builder.cpp
 )
 
 target_include_directories(MSWLua_lib
