@@ -75,6 +75,7 @@ public:
 private:
     std::string& m_strBuf;
 
+    // TOMORROW ME : U can also create meta struct from this
     strSizeView m_funcReturn {0,0};
     strSizeView m_funcCName  {0,0};
     strSizeView m_funcLuaName{0,0};

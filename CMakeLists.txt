@@ -46,6 +46,8 @@ add_library(MSWLua_lib STATIC
         src/log_hook.cpp
         include/mswlua/ffi/new_func_builder.hpp
         src/ffi/new_func_builder.cpp
+        include/mswlua/c_api/run_funcs.hpp
+        src/c_api/run_funcs/runStr.cpp
 )
 
 target_include_directories(MSWLua_lib
