@@ -5,4 +5,11 @@
 
 struct lua_State;
 
-void runStr(lua_State* L, std::string_view codeStr);
+struct pCallArgs{
+    int nargs    = 0;
+    int nresults = 0;
+    int errfunc  = 0;
+};
+
+bool runStr(lua_State* L, std::string_view codeStr);
+
