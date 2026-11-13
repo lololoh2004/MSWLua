@@ -1,4 +1,4 @@
-#include "mswlua/c_api/openLib_funcs.hpp"
+#include "mswlua/c_api/open_libs.hpp"
 extern "C"{
 #include "lua.h"
 #include "lualib.h"

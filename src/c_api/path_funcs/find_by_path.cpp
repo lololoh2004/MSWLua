@@ -1,4 +1,4 @@
-#include "../../../include/mswlua/c_api/path_funcs.hpp"
+#include "mswlua/c_api/path_funcs.hpp"
 extern "C"{
 #include <lua.h>
 }

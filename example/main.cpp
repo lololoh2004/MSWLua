@@ -4,15 +4,14 @@
 
 
 #include "mswlua/common/defines.hpp"
-#include "mswlua/c_api/doScript_funcs.hpp"
-#include "mswlua/c_api/getVal_funcs.hpp"
-#include "mswlua/c_api/init.hpp"
-#include "mswlua/c_api/openLib_funcs.hpp"
-#include "mswlua/c_api/regVal_funcs.hpp"
+#include "mswlua/c_api/get_from_table.hpp"
+#include "mswlua/c_api/open_libs.hpp"
 
 #include "mswlua/ffi/build_func_cdef.hpp"
 #include "mswlua/ffi/build_struct_cdef.hpp"
-#include "mswlua/funcCall/funcCall.hpp"
+#include "../include/mswlua/c_api/func_call.hpp"
+#include "mswlua/c_api/lua_state_wrap.hpp"
+#include "mswlua/c_api/run_str_script.hpp"
 
 // Small setup section
 #ifdef _WIN32
@@ -125,7 +124,7 @@ int main(){
     doScriptStr(state, "debug.func(800)");
     doScriptPath(state, "./example/lua/autorun.lua");
 
-    auto printNumCall = funcCall(state, "api.print_val");
+    auto printNumCall = func_call(state, "api.print_val");
     printNumCall.arg(728).exec();
 
 

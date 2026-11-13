@@ -18,36 +18,36 @@ endif()
 # === MSWLua Wrapper ===
 add_library(MSWLua_lib STATIC
         # INCLUDE
-        include/mswlua/funcCall/funcCall.hpp
+        include/mswlua/c_api/func_call.hpp
         include/mswlua/ffi/build_struct_cdef.hpp
         include/mswlua/ffi/build_func_cdef.hpp
-        include/mswlua/c_api/regVal_funcs.hpp
+        include/mswlua/c_api/set_to_table.hpp
         include/mswlua/common/defines.hpp
-        include/mswlua/c_api/getVal_funcs.hpp
-        include/mswlua/c_api/doScript_funcs.hpp
-        include/mswlua/c_api/report_funcs.hpp
-        include/mswlua/c_api/openLib_funcs.hpp
-        include/mswlua/c_api/init.hpp
+        include/mswlua/c_api/get_from_table.hpp
+        include/mswlua/c_api/report_func.hpp.
+        include/mswlua/c_api/open_libs.hpp
         include/mswlua/c_api/path_funcs.hpp
         # SOURCE
-        src/luaState/init.cpp
+        src/lua_state_wrap/init.cpp
         src/ffi/build_struct_cdef.cpp
         src/ffi/build_func_cdef.cpp
-        src/c_api/regVal_funcs.cpp
-        src/luaState/run_script.cpp
-        src/c_api/report_funcs.cpp
-        src/funcCall/base.cpp
-        src/funcCall/exec.cpp
-        src/c_api/getVal_funcs.cpp
+        src/c_api/set_to_table.cpp
+        src/c_api/report_func.cpp
+        src/func_call/base.cpp
+        src/func_call/exec.cpp
+        src/c_api/get_from_table.cpp
         src/c_api/path_funcs/create_path.cpp
-        src/c_api/openLib_funcs.cpp
+        src/c_api/open_libs.cpp
         src/c_api/path_funcs/find_by_path.cpp
         include/mswlua/log_hook.hpp
         src/log_hook.cpp
         include/mswlua/ffi/new_func_builder.hpp
         src/ffi/new_func_builder.cpp
-        include/mswlua/c_api/run_funcs.hpp
-        src/c_api/run_funcs/runStr.cpp
+        include/mswlua/c_api/run_str_script.hpp
+        src/c_api/run_str_script/load.cpp
+        src/c_api/run_str_script/push_overloads.cpp
+        src/c_api/run_str_script/get_overloads.cpp
+        include/mswlua/c_api/lua_state_wrap.hpp
 )
 
 target_include_directories(MSWLua_lib

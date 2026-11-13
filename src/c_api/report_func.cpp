@@ -1,4 +1,4 @@
-#include "mswlua/c_api/report_funcs.hpp"
+#include "mswlua/c_api/report_func.hpp"
 
 #include "mswlua/log_hook.hpp"
 

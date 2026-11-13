@@ -1,4 +1,4 @@
-#include "mswlua/funcCall/funcCall.hpp"
+#include "../../include/mswlua/c_api/func_call.hpp"
 
 #include "mswlua/log_hook.hpp"
 #include "mswlua/c_api/path_funcs.hpp"
@@ -9,7 +9,7 @@ extern "C"{
 }
 
 
-void funcCall::findAndRefFunc(){
+void func_call::findAndRefFunc(){
     findByPath(m_state, m_tablePath);
 
     if (lua_isnil(m_state, -1)){
@@ -19,19 +19,19 @@ void funcCall::findAndRefFunc(){
     }
     m_funcIdx = luaL_ref(m_state, LUA_REGISTRYINDEX);
 }
-funcCall::funcCall(lua_State* state, const char* tablePath){
+func_call::func_call(lua_State* state, const char* tablePath){
     m_state = state;
     m_tablePath = tablePath;
 
     findAndRefFunc();
 }
-funcCall::~funcCall(){
+func_call::~func_call(){
     if (m_funcIdx != -1) {
         luaL_unref(m_state, LUA_REGISTRYINDEX, m_funcIdx);
     }
 }
 
-void funcCall::reload(){
+void func_call::reload(){
     if (m_funcIdx != -1) {
         luaL_unref(m_state, LUA_REGISTRYINDEX, m_funcIdx);
     }

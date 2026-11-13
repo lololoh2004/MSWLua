@@ -1,18 +1,18 @@
 #include "mswlua/log_hook.hpp"
-#include "mswlua/funcCall/funcCall.hpp"
+#include "../../include/mswlua/c_api/func_call.hpp"
 
 extern "C"{
 #include "lua.h"
 }
 
-funcCall& funcCall::arg(int num){
+func_call& func_call::arg(int num){
     lua_pushnumber(m_state, num);
     m_argCount++;
 
     return *this;
 }
 
-void funcCall::exec(void* resultVar){
+void func_call::exec(void* resultVar){
     lua_rawgeti(m_state, LUA_REGISTRYINDEX, m_funcIdx);
 
     int funcCorrectPos = lua_gettop(m_state) - m_argCount;

@@ -47,6 +47,3 @@ private:
     bool m_success = true;
 };
 
-// bool runStr(lua_State* L, std::string_view codeStr);
-
-
