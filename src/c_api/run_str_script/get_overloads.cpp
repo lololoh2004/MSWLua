@@ -52,7 +52,7 @@ strScript& strScript::getStr(std::string& var){
     if (lua_isstring(m_L, idx)){
         size_t size = 0;
         const char* result = lua_tolstring(m_L, idx, &size);
-        var.append(result, size);
+        var.assign(result, size);
     } else {
         internal_incorrectValLog(m_L, idx);
     }

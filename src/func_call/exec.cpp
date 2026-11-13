@@ -24,6 +24,7 @@ void func_call::exec(void* resultVar){
     int result = lua_pcall(m_state, tempArgCount, LUA_MULTRET, 0);
     if (result != LUA_OK){
         MSWLuaLog(lua_tostring(m_state, -1), "LUA");
+        lua_pop(m_state, 1);
         return;
     }
 }

@@ -3,15 +3,18 @@
 #endif
 
 
+#include <fstream>
+
 #include "mswlua/common/defines.hpp"
 #include "mswlua/c_api/get_from_table.hpp"
 #include "mswlua/c_api/open_libs.hpp"
 
 #include "mswlua/ffi/build_func_cdef.hpp"
 #include "mswlua/ffi/build_struct_cdef.hpp"
-#include "../include/mswlua/c_api/func_call.hpp"
+#include "mswlua/c_api/func_call.hpp"
 #include "mswlua/c_api/lua_state_wrap.hpp"
 #include "mswlua/c_api/run_str_script.hpp"
+#include "mswlua/c_api/set_to_table.hpp"
 
 // Small setup section
 #ifdef _WIN32
@@ -115,14 +118,18 @@ int main(){
 
     mvLine();
     printf("%s", luaCDef.c_str());
-    doScriptStr(state, luaCDef);
+    strScript(state, luaCDef).runScript();
 
 
     mvLine();
     printf(COLOR_GREEN "[MAIN_CXX] : DO & CALL TEST\n" COLOR_DEFLT);
-    doScriptStr(state, "debug.debug_mangled_func()");
-    doScriptStr(state, "debug.func(800)");
-    doScriptPath(state, "./example/lua/autorun.lua");
+
+    std::ifstream file("./example/lua/autorun.lua");
+    std::string scriptCode((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+
+    strScript(state, "debug.debug_mangled_func()").runScript();
+    strScript(state, "debug.func(800)").runScript();
+    strScript(state, scriptCode, "@./example/lua/autorun.lua").runScript();
 
     auto printNumCall = func_call(state, "api.print_val");
     printNumCall.arg(728).exec();
@@ -131,8 +138,8 @@ int main(){
     mvLine();
     printf(COLOR_GREEN "[MAIN_CXX] : REG ( values & defines ) TEST\n" COLOR_DEFLT);
 
-    regValDef(state, PI);
-    regVal(state, 24, "debug.num.real_num");
+    setValDef(state, PI);
+    setVal(state, 24, "debug.num.real_num");
     int testVal1_1;
     getVal(state, testVal1_1, "debug.num.real_num");
     printf("debug.num.real_num : %i\n", testVal1_1);

@@ -2,4 +2,4 @@
 
 
 #define FN_TO_PTR(fn) reinterpret_cast<void*>(fn)
-#define regValDef(L, val) regVal(L, val, "")
+#define setValDef(L, val) setVal(L, val, "")
