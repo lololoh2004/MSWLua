@@ -48,6 +48,7 @@ add_library(MSWLua_lib STATIC
         src/c_api/run_str_script/push_overloads.cpp
         src/c_api/run_str_script/get_overloads.cpp
         include/mswlua/c_api/lua_state_wrap.hpp
+        src/c_api/path_funcs/new_sketch.cpp
 )
 
 target_include_directories(MSWLua_lib
