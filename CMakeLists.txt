@@ -33,8 +33,6 @@ add_library(MSWLua_lib STATIC
         src/ffi/build_func_cdef.cpp
         src/c_api/set_to_table.cpp
         src/c_api/report_func.cpp
-        src/func_call/base.cpp
-        src/func_call/exec.cpp
         src/c_api/get_from_table.cpp
         src/c_api/path_funcs/create_path.cpp
         src/c_api/open_libs.cpp

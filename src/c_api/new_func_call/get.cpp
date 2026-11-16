@@ -46,6 +46,19 @@ funcCall& funcCall::get(float& val) {
     return *this;
 }
 
+funcCall& funcCall::get(double& val) {
+    if (!m_isValid) return *this;
+
+    int idx = m_oldTop + m_readOffset;
+    if (idx <= lua_gettop(m_L) && lua_isnumber(m_L, idx))
+        val = static_cast<float>(lua_tonumber(m_L, idx));
+    else
+        incorrectValLog(m_L, idx);
+
+    m_readOffset++;
+    return *this;
+}
+
 funcCall& funcCall::get(std::string& val) {
     if (!m_isValid) return *this;
 
