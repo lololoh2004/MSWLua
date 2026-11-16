@@ -131,7 +131,7 @@ int main(){
     strScript(state, "debug.func(800)").runScript();
     strScript(state, scriptCode, "@./example/lua/autorun.lua").runScript();
 
-    auto printNumCall = func_call(state, "api.print_val");
+    auto printNumCall = LEGACY_func_call(state, "api.print_val");
     printNumCall.arg(728).exec();
 
 

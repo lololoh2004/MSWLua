@@ -7,8 +7,6 @@ extern "C"{
 #include "mswlua/log_hook.hpp"
 
 
-// === INTERNAL FUNCTIONS ===
-
 static bool internal_runStr(lua_State* L, pcallArgs args){
     if (lua_pcall(L, args.nargs, args.nresults, args.errfunc) != LUA_OK){
         const char* top = lua_tostring(L, -1);
@@ -19,8 +17,6 @@ static bool internal_runStr(lua_State* L, pcallArgs args){
 }
 
 
-// === CLASS METHODS ===
-
 strScript::strScript(lua_State* L, std::string_view script, const char* chunkName, const char* mode){
     m_L = L;
     m_oldTop = lua_gettop(L);
@@ -29,17 +25,17 @@ strScript::strScript(lua_State* L, std::string_view script, const char* chunkNam
     if (loadBufCode != LUA_OK){
         const char* top = lua_tostring(L, -1);
         MSWLuaLog("LUA", "Lua error during code loading (str) : %s", top ? top : "NON_STR_ERR_OBJ");
-        m_success = false;
+        m_isValid = false;
         return;
     }
 }
-void strScript::clearAll(){
+void strScript::clear(){
     lua_settop(m_L, m_oldTop);
 }
 
 strScript& strScript::runScript(){
-    if (m_success == false) return *this;
-    m_success = internal_runStr(m_L, m_pcallArgs);
+    if (m_isValid == false) return *this;
+    m_isValid = internal_runStr(m_L, m_pcallArgs);
 
     return *this;
 }

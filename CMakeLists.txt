@@ -44,11 +44,17 @@ add_library(MSWLua_lib STATIC
         include/mswlua/ffi/new_func_builder.hpp
         src/ffi/new_func_builder.cpp
         include/mswlua/c_api/run_str_script.hpp
-        src/c_api/run_str_script/load.cpp
-        src/c_api/run_str_script/push_overloads.cpp
-        src/c_api/run_str_script/get_overloads.cpp
+        src/c_api/run_str_script/load_and_run.cpp
+        src/c_api/run_str_script/push.cpp
+        src/c_api/run_str_script/get.cpp
         include/mswlua/c_api/lua_state_wrap.hpp
-        src/c_api/path_funcs/new_sketch.cpp
+        src/c_api/path_funcs/push_by_path.cpp
+        src/c_api/new_func_call/init.cpp
+        include/mswlua/common/structs.hpp
+        src/c_api/new_func_call/push.cpp
+        src/c_api/new_func_call/run.cpp
+        src/c_api/new_func_call/get.cpp
+        include/mswlua/common/incorrect_val_log.hpp
 )
 
 target_include_directories(MSWLua_lib

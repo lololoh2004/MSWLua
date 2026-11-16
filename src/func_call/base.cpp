@@ -9,8 +9,8 @@ extern "C"{
 }
 
 
-void func_call::findAndRefFunc(){
-    findByPath(m_state, m_tablePath);
+void LEGACY_func_call::findAndRefFunc(){
+    pushByPath(m_state, m_tablePath);
 
     if (lua_isnil(m_state, -1)){
         MSWLuaLog("Path is invalid", "MSWLUA");
@@ -19,19 +19,19 @@ void func_call::findAndRefFunc(){
     }
     m_funcIdx = luaL_ref(m_state, LUA_REGISTRYINDEX);
 }
-func_call::func_call(lua_State* state, const char* tablePath){
+LEGACY_func_call::LEGACY_func_call(lua_State* state, const char* tablePath){
     m_state = state;
     m_tablePath = tablePath;
 
     findAndRefFunc();
 }
-func_call::~func_call(){
+LEGACY_func_call::~LEGACY_func_call(){
     if (m_funcIdx != -1) {
         luaL_unref(m_state, LUA_REGISTRYINDEX, m_funcIdx);
     }
 }
 
-void func_call::reload(){
+void LEGACY_func_call::reload(){
     if (m_funcIdx != -1) {
         luaL_unref(m_state, LUA_REGISTRYINDEX, m_funcIdx);
     }

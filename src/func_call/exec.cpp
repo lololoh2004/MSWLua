@@ -5,14 +5,14 @@ extern "C"{
 #include "lua.h"
 }
 
-func_call& func_call::arg(int num){
+LEGACY_func_call& LEGACY_func_call::arg(int num){
     lua_pushnumber(m_state, num);
     m_argCount++;
 
     return *this;
 }
 
-void func_call::exec(void* resultVar){
+void LEGACY_func_call::exec(void* resultVar){
     lua_rawgeti(m_state, LUA_REGISTRYINDEX, m_funcIdx);
 
     int funcCorrectPos = lua_gettop(m_state) - m_argCount;

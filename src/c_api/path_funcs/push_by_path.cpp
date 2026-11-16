@@ -49,5 +49,25 @@ void pushByPath(lua_State* L, std::string_view tablePath){
             return;
         }
     }
+}
 
+
+bool tryPushByPath(lua_State* L, std::string_view tablePath){
+    if (L == nullptr) return false;
+    pushByPath(L, tablePath);
+    if (lua_isnil(L, -1)){
+        lua_pop(L, 1);
+        return false;
+    }
+    return true;
+}
+
+bool pushByPathAndCheck(lua_State* L, std::string_view tablePath, int luaT){
+    if (L == nullptr) return false;
+    pushByPath(L, tablePath);
+    if (lua_type(L, -1) != luaT) {
+        lua_pop(L, 1);
+        return false;
+    }
+    return true;
 }
