@@ -7,12 +7,12 @@ extern "C"{
 #include "mswlua/common/incorrect_val_log.hpp"
 
 
-funcCall& funcCall::get(bool& val) {
+funcCall& funcCall::get(bool& var) {
     if (!m_isValid) return *this;
 
     int idx = m_oldTop + m_readOffset;
     if (idx <= lua_gettop(m_L))
-        val = lua_toboolean(m_L, idx);
+        var = lua_toboolean(m_L, idx);
     else
         incorrectValLog(m_L, idx);
 
@@ -20,12 +20,12 @@ funcCall& funcCall::get(bool& val) {
     return *this;
 }
 
-funcCall& funcCall::get(int& val) {
+funcCall& funcCall::get(int& var) {
     if (!m_isValid) return *this;
 
     int idx = m_oldTop + m_readOffset;
     if (idx <= lua_gettop(m_L) && lua_isnumber(m_L, idx))
-        val = static_cast<int>(lua_tointeger(m_L, idx));
+        var = static_cast<int>(lua_tointeger(m_L, idx));
     else
         incorrectValLog(m_L, idx);
 
@@ -33,12 +33,12 @@ funcCall& funcCall::get(int& val) {
     return *this;
 }
 
-funcCall& funcCall::get(float& val) {
+funcCall& funcCall::get(float& var) {
     if (!m_isValid) return *this;
 
     int idx = m_oldTop + m_readOffset;
     if (idx <= lua_gettop(m_L) && lua_isnumber(m_L, idx))
-        val = static_cast<float>(lua_tonumber(m_L, idx));
+        var = static_cast<float>(lua_tonumber(m_L, idx));
     else
         incorrectValLog(m_L, idx);
 
@@ -46,12 +46,12 @@ funcCall& funcCall::get(float& val) {
     return *this;
 }
 
-funcCall& funcCall::get(double& val) {
+funcCall& funcCall::get(double& var) {
     if (!m_isValid) return *this;
 
     int idx = m_oldTop + m_readOffset;
     if (idx <= lua_gettop(m_L) && lua_isnumber(m_L, idx))
-        val = static_cast<float>(lua_tonumber(m_L, idx));
+        var = static_cast<float>(lua_tonumber(m_L, idx));
     else
         incorrectValLog(m_L, idx);
 
@@ -59,14 +59,14 @@ funcCall& funcCall::get(double& val) {
     return *this;
 }
 
-funcCall& funcCall::get(std::string& val) {
+funcCall& funcCall::get(std::string& var) {
     if (!m_isValid) return *this;
 
     int idx = m_oldTop + m_readOffset;
-    if (idx <= lua_gettop(m_L) && lua_type(m_L, idx) == LUA_TSTRING) {
-        size_t len = 0;
-        const char* str = lua_tolstring(m_L, idx, &len);
-        val.assign(str, len);
+    if (idx <= lua_gettop(m_L) && lua_isstring(m_L, idx)) {
+        size_t size = 0;
+        const char* result = lua_tolstring(m_L, idx, &size);
+        var.assign(result, size);
     } else {
         incorrectValLog(m_L, idx);
     }

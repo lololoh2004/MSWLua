@@ -19,8 +19,9 @@ public:
     strScript& operator=(const strScript&) = delete;
 
     // PUSHERS
-    strScript& push(int val);
-    strScript& push(float val);
+    strScript& push(bool   val);
+    strScript& push(int    val);
+    strScript& push(float  val);
     strScript& push(double val);
     strScript& push(std::string_view val);
 
@@ -28,17 +29,19 @@ public:
     strScript& runScript();
 
     // GETTERS
-    strScript& get(int& var);
-    strScript& get(float& var);
+    strScript& get(bool&   var);
+    strScript& get(int&    var);
+    strScript& get(float&  var);
     strScript& get(double& var);
     strScript& get(std::string& var);
 
     void clear();
 private:
-    lua_State* m_L;
-    pcallArgs m_pcallArgs = {0, 0, 0}; // -1 is MULTRET define in lua.h
-    int m_oldTop;
-    int m_readOffset = 1;
-    bool m_isValid = true;
+    lua_State* m_L = nullptr;
+    int  m_nargs  = 0;
+    int  m_oldTop = 0;
+    int  m_readOffset = 1;
+    bool m_hasRun  = false;
+    bool m_isValid = false;
 };
 

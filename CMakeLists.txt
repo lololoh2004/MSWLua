@@ -47,11 +47,11 @@ add_library(MSWLua_lib STATIC
         src/c_api/run_str_script/get.cpp
         include/mswlua/c_api/lua_state_wrap.hpp
         src/c_api/path_funcs/push_by_path.cpp
-        src/c_api/new_func_call/init.cpp
+        src/c_api/func_call/init.cpp
         include/mswlua/common/structs.hpp
-        src/c_api/new_func_call/push.cpp
-        src/c_api/new_func_call/run.cpp
-        src/c_api/new_func_call/get.cpp
+        src/c_api/func_call/push.cpp
+        src/c_api/func_call/run.cpp
+        src/c_api/func_call/get.cpp
         include/mswlua/common/incorrect_val_log.hpp
 )
 

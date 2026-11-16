@@ -21,6 +21,7 @@ funcCall& funcCall::push(bool val){
 
     return *this;
 }
+
 funcCall& funcCall::push(int val){
     if (m_isValid == false) return *this;
     _beforePush();
@@ -30,6 +31,7 @@ funcCall& funcCall::push(int val){
 
     return *this;
 }
+
 funcCall& funcCall::push(float val){
     if (m_isValid == false) return *this;
     _beforePush();
@@ -39,6 +41,7 @@ funcCall& funcCall::push(float val){
 
     return *this;
 }
+
 funcCall& funcCall::push(double val){
     if (m_isValid == false) return *this;
     _beforePush();
@@ -48,6 +51,7 @@ funcCall& funcCall::push(double val){
 
     return *this;
 }
+
 funcCall& funcCall::push(std::string_view val){
     if (m_isValid == false) return *this;
     _beforePush();
